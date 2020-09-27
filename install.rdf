@@ -1,142 +1,26 @@
 <?xml version="1.0"?>
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
  <Description about="urn:mozilla:install-manifest">
-  <em:id>{19503e42-ca3c-4c27-b1e2-9cdb2170ee34}</em:id>
-  <em:name>FlashGot</em:name>
-  <em:version>1.5.6.14rc1</em:version>
-  <em:description>Enables Firefox, Mozilla Suite, Netscape and Thunderbird to handle single and massive (&quot;all&quot; and &quot;selection&quot;) downloads using the most popular external download managers for Windows, Mac OS X, Linux and FreeBSD (dozens currently supported, see Extension's Home Page for details). FlashGot offers also a Build Gallery functionality which helps to synthetize full media galleries in one page, from serial contents originally scattered on several pages, for easy and fast &quot;download all&quot;.</em:description>
-  <em:creator>Giorgio Maone</em:creator>
+  <em:name>Grabit</em:name>
+  <em:id>{77485BDA-6FFE-5A73-B3ED-943F929C15AE}</em:id>
+  <em:version>1.6</em:version>
   <em:type>2</em:type>
+  <em:targetApplication>
+   <Description>
+    <em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
+    <em:minVersion>28.7.0</em:minVersion>
+    <em:maxVersion>28.*</em:maxVersion>
+   </Description>
+  </em:targetApplication>
+  <em:description>Enables Firefox, Mozilla Suite, Netscape and Thunderbird to handle single and massive (&quot;all&quot; and &quot;selection&quot;) downloads using the most popular external download managers for Windows, Mac OS X, Linux and FreeBSD (dozens currently supported, see Extension's Home Page for details). Grabit offers also a Build Gallery functionality which helps to synthetize full media galleries in one page, from serial contents originally scattered on several pages, for easy and fast &quot;download all&quot;.</em:description>
+  <em:optionsURL>chrome://grabit/content/grabitOptions.xul</em:optionsURL>
+  <em:homepageURL>https://realityripple.com/Software/Mozilla-Extensions/Grabit/</em:homepageURL>
+  <em:updateURL>https://realityripple.com/Software/Mozilla-Extensions/Grabit/update.rdf</em:updateURL>
+  <em:iconURL>chrome://grabit/skin/logo.png</em:iconURL>
+  <em:icon64URL>chrome://grabit/skin/logo64.png</em:icon64URL>
+  <em:creator>RealityRipple</em:creator>
+  <em:developer>Giorgio Maone</em:developer>
   <em:contributor>YuanHongYe (new Thunder support)</em:contributor> 
   <em:contributor>Zhang Ji (BitComet support)</em:contributor>
-  <em:translator>Ahmad Zhafir (Malay translation)</em:translator>
-  <em:translator>Alexander &quot;Hawksthorne&quot; Kirilov and Kalin Takev  (Bulgarian translation)</em:translator>
-  <em:translator>Drive DRKA (Belarusian translation)</em:translator>
-  <em:translator>Anthony L. Bryan and Darius Liktorius (Metalink support)</em:translator>
-  <em:translator>Artek Działek, Bartosz Piec and Piotr Konieczny (Polish translation)</em:translator>
-  <em:translator>Axel Zechner (KGet support)</em:translator>
-  <em:translator>Kozák Csaba (WonderCsabo), Bálint Farkas and Henriett Peller (Hungarian translation)</em:translator>
-  <em:translator>Basem Narmok (Arabic translation)</em:translator>
-  <em:translator>Baurzhan Muftakhidinov (Kazakh translation)</em:translator>
-  <em:translator>Bayarsaikhan Enkhtaivan (Mongolian translation)</em:translator>
-  <em:translator>BDNT (Indonesian translation)</em:translator>     
-  <em:translator>Besmir Godole (Albanian translation)</em:translator>
-  <em:translator>Bigbigbomb, Blackdire, Charlie Chen and George C. Tsoi (Simplified Chinese translation)</em:translator>
-  <em:translator>Cola99 (Traditional Chinese translation)</em:translator>
-  <em:translator>Diogo Mafra, Raryel Costa Souza and Marcelo Ghelman (Portuguese translation)</em:translator>
-  <em:translator>Duriel (Simplified Chinese translation)</em:translator>
-  <em:translator>Emilio Malaman, Tulio Padilha and Pesty (Portuguese translation)</em:translator>
-  <em:translator>Engin Yazılan (Turkish translation)</em:translator>
-  <em:translator>Frantisek Augusztin(KGet support)</em:translator>
-  <em:translator>Frackounet, Yann Bill &amp; BlackJack (French translation)</em:translator>
-  <em:translator>Gaspar Alomar Trías (Catalan translation)</em:translator>
-  <em:translator>Gomyoung Kim (Korean translation)</em:translator>
-  <em:translator>Greener(Traditional Chinese translation)</em:translator>
-  <em:translator>k2jp and Hadakadenkyu (Japanese translation)</em:translator>
-  <em:translator>HU Tian-Lei (Thunder hints)</em:translator>
-  <em:translator>iLogik (Romanian translation)</em:translator>
-  <em:translator>Jacques Letellier, Yann Bill and Calimero988 (French translation)</em:translator>
-  <em:translator>Jan Janssen (Gwget support)</em:translator>
-  <em:translator>Jarol and Nameless (Spanish translation)</em:translator>
-  <em:translator>Jonathan Avraham (Hebrew translation)</em:translator>
-  <em:translator>Kimmo Siekkinen and Jouko Saarinen (Finnish translation)</em:translator>
-  <em:translator>Jure Osredkar and Miles (Slovenian translation)</em:translator>
-  <em:translator>Kesisidis  Dimitrios and Rookie (Greek translation)</em:translator>
-  <em:translator>Krcko (Croatian translation)</em:translator>
-  <em:translator>Kostas Papadimas (Greek translation)</em:translator>
-  <em:translator>Leon Odendaal (Afrikaans translation)</em:translator>
-  <em:translator>Tomas Kordik (Czech translation)</em:translator>
-  <em:translator>Leif Larsson (Swedish translation)</em:translator>
-  <em:translator>Levent Karakas (Turkish translation)</em:translator>
-  <em:translator>Lois Lamas (Galician translation)</em:translator>
-  <em:translator>Luca Pedrazzi (Italian translation)</em:translator>
-  <em:translator>Max Velasques (wxDownload Fast support)</em:translator>
-  <em:translator>M. Agras and Urko (Spanish translation)</em:translator>
-  <em:translator>Marius Navickas (Lithuanian translation)</em:translator>
-  <em:translator>Martin Joné (Norwegian Bokmål translation)</em:translator>
-  <em:translator>Martin Harder (Danish translation)</em:translator>
-  <em:translator>Michal Duda (Czech translation)</em:translator>
-  <em:translator>Mohsen Qorbani (Persian translation)</em:translator>
-  <em:translator>Ömer Fadıl USTA (Turkish translation)</em:translator>
-  <em:translator>Oliverl (Estonian translation)</em:translator>
-  <em:translator>Patipat Susumpow (Thai translation)</em:translator>
-  <em:translator>Pshadow (Traditional Chinese translation)</em:translator>
-  <em:translator>Ragnaar and Водкотерапевт (Russian translation)</em:translator>
-  <em:translator>ReinekeFux and Thomas Weber (German translation)</em:translator>
-  <em:translator>Robert Setiadi (Indonesian translation)</em:translator>
-  <em:translator>Raryel Costa Souza- Brazil (Portuguese/Brazil translation)</em:translator>
-  <em:translator>Sergey Khoruzhin (Ukrainian translation)</em:translator>
-  <em:translator>Steven Hemelaere and Alf (Dutch translation)</em:translator>
-  <em:translator>Unghost (Russian translation)</em:translator>
-  <em:translator>Wladow (Slovak translation)</em:translator>
-  <em:translator>Љубиша Радовановић (Serbian translation)</em:translator>
-  <em:optionsURL>chrome://flashgot/content/flashgotOptions.xul</em:optionsURL>
-  <em:homepageURL>http://flashgot.net</em:homepageURL>
-  <em:iconURL>chrome://flashgot/skin/icon32.png</em:iconURL>
-  <em:aboutURL>chrome://flashgot/content/about.xul</em:aboutURL>
-  <!-- Firefox -->
-  <em:targetApplication>
-   <Description>
-    <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-    <em:minVersion>14.0</em:minVersion>
-    <em:maxVersion>50.*</em:maxVersion>
-   </Description>
-  </em:targetApplication>
-  <!-- Mozilla Suite -->
-  <em:targetApplication>
-   <Description>
-    <em:id>{86c18b42-e466-45a9-ae7a-9b95ba6f5640}</em:id>
-    <em:minVersion>${moz.minVersion}</em:minVersion>
-    <em:maxVersion>${moz.maxVersion}</em:maxVersion>
-   </Description>
-  </em:targetApplication>
-  <!--SeaMonkey -->
-  <em:targetApplication>
-   <Description>
-    <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
-    <em:minVersion>2.17</em:minVersion>
-    <em:maxVersion>2.40</em:maxVersion>
-   </Description>
-  </em:targetApplication>
-  <!-- Mozilla Thunderbird -->
-  <em:targetApplication>
-   <Description>
-    <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
-    <em:minVersion>14.0</em:minVersion>
-    <em:maxVersion>52.*</em:maxVersion>
-   </Description>
-  </em:targetApplication>
-  <!-- eMusic -->
-   <em:targetApplication>
-   <Description>
-    <em:id>dlm@emusic.com</em:id>
-    <em:minVersion>${emusic.minVersion}</em:minVersion>
-    <em:maxVersion>${emusic.maxVersion}</em:maxVersion>
-   </Description>
-  </em:targetApplication>
-  <!-- Toolkit -->
-  <em:targetApplication>
-   <Description>
-    <em:id>toolkit@mozilla.org</em:id>
-    <em:minVersion>${tk.minVersion}</em:minVersion>
-    <em:maxVersion>${tk.maxVersion}</em:maxVersion>
-   </Description>
-  </em:targetApplication>
-  <!-- Songbird -->
-  <em:targetApplication>
-   <Description>
-    <em:id>songbird@songbirdnest.com</em:id>
-    <em:minVersion>${sb.minVersion}</em:minVersion>
-    <em:maxVersion>${sb.maxVersion}</em:maxVersion>
-   </Description>
-  </em:targetApplication>
-  <!-- Flock -->
-  <em:targetApplication> 
-   <Description>
-    <em:id>{a463f10c-3994-11da-9945-000d60ca027b}</em:id>
-    <em:minVersion>${flock.minVersion}</em:minVersion>
-    <em:maxVersion>${flock.maxVersion}</em:maxVersion>
-   </Description>
-  </em:targetApplication>
  </Description>
 </RDF>

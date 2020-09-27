@@ -22,24 +22,24 @@
 const ASK_NEVER = [false, false, false];
 
 // *** Base/Windows DMS ********************************************************
-function FlashGotDM(name) {
+function GrabitDM(name) {
   if (arguments.length > 0) {
     this._init(name);
   }
 }
 
-FlashGotDM.init = function() {
-  FlashGotDM.dms = [];
-  FlashGotDM.dmtests = {};
-  FlashGotDM.executables = {};
-  FlashGotDM.deleteOnExit = [];
-  FlashGotDM.deleteOnUninstall = [];
-  FlashGotDM.initDMS();
+GrabitDM.init = function() {
+  GrabitDM.dms = [];
+  GrabitDM.dmtests = {};
+  GrabitDM.executables = {};
+  GrabitDM.deleteOnExit = [];
+  GrabitDM.deleteOnUninstall = [];
+  GrabitDM.initDMS();
 };
 
-FlashGotDM.cleanup = function(uninstalling) {
-  var trash = [].concat(FlashGotDM.deleteOnExit);
-  if (uninstalling) trash = trash.concat(FlashGotDM.deleteOnUninstall);
+GrabitDM.cleanup = function(uninstalling) {
+  var trash = [].concat(GrabitDM.deleteOnExit);
+  if (uninstalling) trash = trash.concat(GrabitDM.deleteOnUninstall);
   for (var f of trash) {
     if (f instanceof CI.nsIFile) {
       try { f.remove(true); } catch(ex) {}
@@ -47,10 +47,10 @@ FlashGotDM.cleanup = function(uninstalling) {
   }
 };
 
-FlashGotDM.prototype = {
+GrabitDM.prototype = {
   _init: function(name) {
     this.name = name;
-    const dms = FlashGotDM.dms;
+    const dms = GrabitDM.dms;
     var pos = dms.length;
     if (name in dms) {
       var other = dms[name];
@@ -112,15 +112,15 @@ FlashGotDM.prototype = {
     if (typeof(this._exeFile) == "object") return this._exeFile;
     const exeName = this.exeName;
     if (!exeName) return this._exeFile = null;
-    if (typeof(FlashGotDM.executables[exeName]) == "object") {
-      return this._exeFile = FlashGotDM.executables[exeName];
+    if (typeof(GrabitDM.executables[exeName]) == "object") {
+      return this._exeFile = GrabitDM.executables[exeName];
     }
     try {
       var exeFile = fg.profDir.clone();
       exeFile.append(exeName);
       this._exeFile = this.checkExePlatform(exeFile);
       if(this._exeFile) {
-        FlashGotDM.deleteOnUninstall.push(this._exeFile);
+        GrabitDM.deleteOnUninstall.push(this._exeFile);
         if (this.createExecutable()) {
           this.log(this._exeFile.path + " created");
         }
@@ -129,7 +129,7 @@ FlashGotDM.prototype = {
       this._exeFile = null;
       this.log("Can't init " + exeName + ":\n" + ex.message);
     }
-    return FlashGotDM.executables[exeName] = this._exeFile;
+    return GrabitDM.executables[exeName] = this._exeFile;
   }
 ,
   checkExePlatform: function(exeFile) {
@@ -139,7 +139,7 @@ FlashGotDM.prototype = {
       if (!(fg.getPref("useWine", true) || this.name == fg.defaultDM))
         return null;
 
-      if(!FlashGotDM.wine) {
+      if(!GrabitDM.wine) {
         // check for wine
         var wine = CC["@mozilla.org/file/local;1"].createInstance(CI.nsILocalFile);
         var winePaths = fg.getPref("wine.paths", "/usr/bin/wine:/usr/local/bin/wine:/opt/local/bin/wine:/Applications/Darwine/Wine.bundle/Contents/bin/wine");
@@ -149,25 +149,25 @@ FlashGotDM.prototype = {
           try {
             wine.initWithPath(winePath);
             if(wine.exists()) {
-              FlashGotDM.wine = wine;
+              GrabitDM.wine = wine;
               break;
             }
           } catch(e) {}
         }
-        if(!FlashGotDM.wine) return null;
-        FlashGotDM.wineExecutables = [];
+        if(!GrabitDM.wine) return null;
+        GrabitDM.wineExecutables = [];
       }
-      FlashGotDM.wineExecutables.push(exeFile);
+      GrabitDM.wineExecutables.push(exeFile);
       return exeFile;
     }
 
     if (fg.isMac) return null;
 
-    if (exeFile.leafName == FlashGotDM.prototype.exeName) {
+    if (exeFile.leafName == GrabitDM.prototype.exeName) {
       // check if it's a global install and, if it is, put the executable
       // in the install dir to comply with the S.A.F.E.R. policy
       var reg = CC['@mozilla.org/chrome/chrome-registry;1'].getService(CI.nsIChromeRegistry);
-      var uri = reg.convertChromeURL(IOS.newURI("chrome://flashgot/content", null, null));
+      var uri = reg.convertChromeURL(IOS.newURI("chrome://grabit/content", null, null));
       if (uri instanceof CI.nsIJARURI) {
         uri = uri.JARFile;
         if (uri instanceof CI.nsIFileURL) {
@@ -198,7 +198,7 @@ FlashGotDM.prototype = {
     if (!this.exeFile) return false;
 
     var dmtest;
-    if (typeof(FlashGotDM.dmtests[this.exeName]) != "string") {
+    if (typeof(GrabitDM.dmtests[this.exeName]) != "string") {
       const dmtestFile = fg.tmpDir.clone();
       dmtestFile.append(this.exeName + ".test");
       try {
@@ -211,8 +211,8 @@ FlashGotDM.prototype = {
         this.log(ex.message);
         dmtest = "";
       }
-      FlashGotDM.dmtests[this.exeName] = dmtest;
-    } else dmtest = FlashGotDM.dmtests[this.exeName];
+      GrabitDM.dmtests[this.exeName] = dmtest;
+    } else dmtest = GrabitDM.dmtests[this.exeName];
     return this._supported = dmtest.indexOf(this.name + "|OK") > -1;
   }
 ,
@@ -456,7 +456,7 @@ FlashGotDM.prototype = {
 ,
   createJobFile: function(job) {
     const jobFile = fg.tmpDir.clone();
-    jobFile.append("flashgot.fgt");
+    jobFile.append("grabit.fgt");
     jobFile.createUnique(0, B8('700'));
     IO.writeFile(jobFile, job);
     return jobFile;
@@ -475,10 +475,10 @@ FlashGotDM.prototype = {
     if (!exeFile) return false;
 
     var exists = exeFile.exists();
-    if (exists && !fg.firstRun)
+    if (exists)
       return false;
 
-    var channel = IOS.newChannel("chrome://flashgot/content/" + this.exeName, null, null);
+    var channel = IOS.newChannel("chrome://grabit/content/" + this.exeName, null, null);
     var bis = CC['@mozilla.org/binaryinputstream;1'].createInstance(CI.nsIBinaryInputStream);
     bis.setInputStream(channel.open());
     const bytesCount = channel.contentLength;
@@ -524,9 +524,9 @@ FlashGotDM.prototype = {
         || this.createExecutable()) {
         const proc = CC['@mozilla.org/process/util;1'].createInstance(
           CI.nsIProcess);
-        if (FlashGotDM.wine && FlashGotDM.wineExecutables.indexOf(exeFile) > -1) {
+        if (GrabitDM.wine && GrabitDM.wineExecutables.indexOf(exeFile) > -1) {
           args.unshift(exeFile.path);
-          exeFile = FlashGotDM.wine;
+          exeFile = GrabitDM.wine;
         }
         proc.init(exeFile);
         this.log("Running " + exeFile.path + " " + args.join(" ") + " -- " +(blocking ? "blocking" : "async") );
@@ -576,7 +576,7 @@ FlashGotDM.prototype = {
       }
     }
     const isMulti = opType != fg.OP_ONE;
-    const multiDirPref = "flashgot.multiDir";
+    const multiDirPref = "grabit.multiDir";
     var downloadDirPref =
                     (isMulti && findDownloadDir(multiDirPref)) ||
                     findDownloadDir("browser.download.dir") ||
@@ -615,15 +615,15 @@ FlashGotDM.prototype = {
       : links[0].href.replace(/^[\w-]+:\/*([^\/]+\/).*?([^\/\?]+)(?:$|\?.*)/, '$1.../$2');
 
     var params = {
-      title: "FlashGot (" + this.name.replace(/[\(\)]/g, "") + ") " + urlLabel,
+      title: "Grabit (" + this.name.replace(/[\(\)]/g, "") + ") " + urlLabel,
       initialDir: initialDir,
       choosenDir: null,
       links: links
     }
 
     this.getWindow().openDialog(
-              "chrome://flashgot/content/chooser.xul",
-              "flashgotChooser",
+              "chrome://grabit/content/chooser.xul",
+              "grabitChooser",
               "chrome, dialog, modal, dependent, centerscreen, resizable",
               params);
 
@@ -650,7 +650,7 @@ FlashGotDM.prototype = {
     links.length = 1;
     var ufile;
     if (sfile) {
-      const f =  FlashGotDMX.prototype.createJobFile
+      const f =  GrabitDMX.prototype.createJobFile
         .call(this, ulist.join(fg.isWindows ? "\r\n" : "\n"));
       fg.doomPrivateFile(f);
       ufile = f.path;
@@ -669,7 +669,7 @@ FlashGotDM.prototype = {
 
 
 // *** Unix-like DMS ***********************************************************
-function FlashGotDMX(name, cmd, argsTemplate, unixPath) {
+function GrabitDMX(name, cmd, argsTemplate, unixPath) {
   if (arguments.length != 0) {
     this._init(name);
     this.unixCmds[name] = cmd;
@@ -682,17 +682,17 @@ function FlashGotDMX(name, cmd, argsTemplate, unixPath) {
     this.cookieSupport =  /\[.*?(?:CFILE|COOKIE).*?\]/.test(this.argsTemplate);
   }
   if (fg.isMac) {
-    this.createJobFile = FlashGotDMMac.prototype.createJobFile;
+    this.createJobFile = GrabitDMMac.prototype.createJobFile;
   }
 }
-FlashGotDMX.prototype = new FlashGotDM();
-FlashGotDMX.constructor = FlashGotDMX;
-FlashGotDMX.prototype.exeName = "flashgot.sh";
-FlashGotDMX.prototype.terminal = false;
-FlashGotDMX.prototype.askPath = [true, true, true];
-FlashGotDMX.prototype.unixCmds = {};
-FlashGotDMX.prototype.unixPaths = [];
-FlashGotDMX.prototype.__defineGetter__("unixShell", function() {
+GrabitDMX.prototype = new GrabitDM();
+GrabitDMX.constructor = GrabitDMX;
+GrabitDMX.prototype.exeName = "grabit.sh";
+GrabitDMX.prototype.terminal = false;
+GrabitDMX.prototype.askPath = [true, true, true];
+GrabitDMX.prototype.unixCmds = {};
+GrabitDMX.prototype.unixPaths = [];
+GrabitDMX.prototype.__defineGetter__("unixShell", function() {
   var f = CC["@mozilla.org/file/local;1"].createInstance(CI.nsILocalFile);
   try {
     f.initWithPath("/bin/sh");
@@ -704,12 +704,12 @@ FlashGotDMX.prototype.__defineGetter__("unixShell", function() {
     f = null;
     this.log("No *X shell: " + ex.message);
   }
-  delete FlashGotDMX.prototype.unixShell;
-  return FlashGotDMX.prototype.unixShell = f;
+  delete GrabitDMX.prototype.unixShell;
+  return GrabitDMX.prototype.unixShell = f;
 });
 
-FlashGotDMX.prototype.argsTemplate = "[URL]";
-FlashGotDMX.prototype.launchSupportTest = function(testFile) {
+GrabitDMX.prototype.argsTemplate = "[URL]";
+GrabitDMX.prototype.launchSupportTest = function(testFile) {
   const cmds = this.unixCmds;
   var script= "PATH=\"" + this.unixPaths.join(":") + ":$PATH:" +  "\"\n(\n";
   for (var name in cmds) {
@@ -721,7 +721,7 @@ FlashGotDMX.prototype.launchSupportTest = function(testFile) {
   this.performJob(script, true);
 };
 
-FlashGotDMX.prototype.createCmdLine = function(parms, cmd) {
+GrabitDMX.prototype.createCmdLine = function(parms, cmd) {
   return '"' + (cmd || this.unixCmd) + '" ' +
     this.argsTemplate.replace(/\[(.*?)(URL|FNAME|REFERER|COOKIE|FOLDER|POST|UFILE|CFILE|ULIST|USERPASS|UA)(.*?)\]/g,
       function(all, before, parm, after) {
@@ -733,10 +733,10 @@ FlashGotDMX.prototype.createCmdLine = function(parms, cmd) {
       }
    ) + "\n";
 };
-FlashGotDMX.prototype.shellEsc = function(s) {
+GrabitDMX.prototype.shellEsc = function(s) {
   return s ? s.replace(/([\\\*\?\[\]\$&<>\|\(\)\{\};"'`])/g,"\\$1").replace(/\s/g,"\\ ") : null;
 };
-FlashGotDMX.prototype.createJob = function(links, opType) {
+GrabitDMX.prototype.createJob = function(links, opType) {
     const shellEsc = this.shellEsc;
   // basic implementation
 
@@ -791,13 +791,13 @@ FlashGotDMX.prototype.createJob = function(links, opType) {
 
   if (this.terminal) {
     const autoClose = fg.getPref("term.autoClose", -1);
-    const title = shellEsc("FlashGot " +  (len > 1 ? "(" + len + ")" : links[0].href));
+    const title = shellEsc("Grabit " +  (len > 1 ? "(" + len + ")" : links[0].href));
     const shell = this.unixShell && shellEsc(this.unixShell.path) || '';
     job =
-      "if [ -z \"$FLASHGOT_TERM\" ]; then\n" +
-      "  export FLASHGOT_TERM; FLASHGOT_TERM=1\n" +
-      "  if which flashgot-term >/dev/null 2>&1; then\n" +
-      "     flashgot-term " + title + " " + shell + " \"$0\" && exit\n" +
+      "if [ -z \"$GRABIT_TERM\" ]; then\n" +
+      "  export GRABIT_TERM; GRABIT_TERM=1\n" +
+      "  if which grabit-term >/dev/null 2>&1; then\n" +
+      "     grabit-term " + title + " " + shell + " \"$0\" && exit\n" +
       "  fi\n" +
       "  if which gnome-terminal >/dev/null 2>&1; then\n" +
       "    gnome-terminal -t " + title + " -x " + shell + " \"$0\" && exit\n" +
@@ -830,27 +830,27 @@ FlashGotDMX.prototype.createJob = function(links, opType) {
   return job;
 };
 
-FlashGotDMX.prototype.shreddingCmd = function() {
+GrabitDMX.prototype.shreddingCmd = function() {
   return (fg.inPrivate || fg.getPref("shredding"))
     ? "\n( shred -uf \"$0\" || srm -fm \"$0\" || rm -P \"$0\" || rm \"$0\" ) >/dev/null 2>&1 &\n"
     : "";
 };
 
-FlashGotDMX.prototype.performJob = function(job, blocking) {
+GrabitDMX.prototype.performJob = function(job, blocking) {
 
   job = "#!" + this.unixShell.path + "\n" + job + this.shreddingCmd();
 
   const jobFile = this.createJobFile(job);
   jobFile.permissions = parseInt("0700", 8);
   return !(fg.isMac
-    ? this.runNative([], blocking, FlashGotDMMac.exeFile)
+    ? this.runNative([], blocking, GrabitDMMac.exeFile)
     : this.runNative([jobFile.path], blocking, this.unixShell)
   );
 };
-FlashGotDMX.prototype.checkExePlatform = function(exeFile) {
+GrabitDMX.prototype.checkExePlatform = function(exeFile) {
   return this.unixShell && exeFile;
 };
-FlashGotDMX.prototype.createExecutable = function() {
+GrabitDMX.prototype.createExecutable = function() {
   return false;
 };
 
@@ -860,55 +860,55 @@ FlashGotDMX.prototype.createExecutable = function() {
 
 
 // *** Mac OS X DMS ************************************************************
-function FlashGotDMMac(name, creatorId, macAppName) {
+function GrabitDMMac(name, creatorId, macAppName) {
   if (arguments.length != 0) {
     this._initMac(name, creatorId, macAppName);
   }
 }
-FlashGotDMMac.exeFile = null;
-FlashGotDMMac.appleScriptFile = null;
-FlashGotDMMac.appleScriptName = "flashgot-mac-script";
-FlashGotDMMac.OSASCRIPT = "/usr/bin/osascript";
-FlashGotDMMac.prototype = new FlashGotDM();
-FlashGotDMMac.constructor = FlashGotDMMac;
-FlashGotDMMac.prototype.exeName = "FlashGot";
-FlashGotDMMac.prototype.cookieSupport = false;
-FlashGotDMMac.prototype.macCreators = [];
-FlashGotDMMac.prototype._initMac = function(name, creatorId, macAppName) {
+GrabitDMMac.exeFile = null;
+GrabitDMMac.appleScriptFile = null;
+GrabitDMMac.appleScriptName = "grabit-mac-script";
+GrabitDMMac.OSASCRIPT = "/usr/bin/osascript";
+GrabitDMMac.prototype = new GrabitDM();
+GrabitDMMac.constructor = GrabitDMMac;
+GrabitDMMac.prototype.exeName = "Grabit";
+GrabitDMMac.prototype.cookieSupport = false;
+GrabitDMMac.prototype.macCreators = [];
+GrabitDMMac.prototype._initMac = function(name, creatorId, macAppName) {
   this._init(name);
 
   if (creatorId) {
-    const creators=FlashGotDMMac.prototype.macCreators;
+    const creators=GrabitDMMac.prototype.macCreators;
     creators[creators.length] = {name: name, id: creatorId};
   }
   this.macAppName = macAppName ? macAppName : name;
   this.initAppleScriptBridge();
-  FlashGotDMMac.exeFile = this.exeFile;
+  GrabitDMMac.exeFile = this.exeFile;
 };
 
-FlashGotDMMac.prototype.initAppleScriptBridge = function() {
-  if (FlashGotDMMac.appletScriptFile) return;
+GrabitDMMac.prototype.initAppleScriptBridge = function() {
+  if (GrabitDMMac.appletScriptFile) return;
 
-  (FlashGotDMMac.appleScriptFile = fg.tmpDir.clone())
-      .append(FlashGotDMMac.appleScriptName);
+  (GrabitDMMac.appleScriptFile = fg.tmpDir.clone())
+      .append(GrabitDMMac.appleScriptName);
 
 }
-FlashGotDMMac.prototype.shellEsc = function(s) {
+GrabitDMMac.prototype.shellEsc = function(s) {
   return s ? "'" + s.replace(/'/g, '"\'"') + "'" : null;
 }
-FlashGotDMMac.prototype.createScriptLauncher = function() {
+GrabitDMMac.prototype.createScriptLauncher = function() {
   return "#!/bin/sh\n" +
-    "SCRIPT=" + this.shellEsc(FlashGotDMMac.appleScriptFile.path) + "\n" +
+    "SCRIPT=" + this.shellEsc(GrabitDMMac.appleScriptFile.path) + "\n" +
     "USCRIPT=\"$SCRIPT.$$\"\n" +
     "mv \"$SCRIPT\" \"$USCRIPT\" || exit 1\n" +
     "head -n 1 \"$USCRIPT\" | grep '#!' >/dev/null &&  \"$USCRIPT\" || " +
-    FlashGotDMMac.OSASCRIPT + " \"$USCRIPT\"\n" +
+    GrabitDMMac.OSASCRIPT + " \"$USCRIPT\"\n" +
     "( srm -fm \"$USCRIPT\" || rm -P \"$USCRIPT\" || rm \"$USCRIPT\" ) &"; // inPrivate or not...
 };
-FlashGotDMMac.prototype.checkExePlatform = function(exeFile) {
+GrabitDMMac.prototype.checkExePlatform = function(exeFile) {
   return fg.isMac && exeFile || null;
 };
-FlashGotDMMac.prototype.createExecutable = function() {
+GrabitDMMac.prototype.createExecutable = function() {
 
 
   var exeFile = this._exeFile;
@@ -952,8 +952,8 @@ FlashGotDMMac.prototype.createExecutable = function() {
   }
   return false;
 };
-FlashGotDMMac.prototype.launchSupportTest = function(testFile) {
-  const creators = FlashGotDMMac.prototype.macCreators;
+GrabitDMMac.prototype.launchSupportTest = function(testFile) {
+  const creators = GrabitDMMac.prototype.macCreators;
 
   var s = [
     'global gRes',
@@ -985,8 +985,8 @@ FlashGotDMMac.prototype.launchSupportTest = function(testFile) {
   );
   this.performJob(s.join("\n"), true);
 };
-FlashGotDMMac.prototype.createJobFile = function(job) {
-  const jobFile = FlashGotDMMac.appleScriptFile;
+GrabitDMMac.prototype.createJobFile = function(job) {
+  const jobFile = GrabitDMMac.appleScriptFile;
   try {
     jobFile.remove(true);
   } catch(ex) {}
@@ -999,11 +999,11 @@ FlashGotDMMac.prototype.createJobFile = function(job) {
   }
   return null;
 }
-FlashGotDMMac.prototype.performJob = function(job, blocking) {
+GrabitDMMac.prototype.performJob = function(job, blocking) {
   return (this.createJobFile(job)) && !this.runNative([], blocking, this.exeFile);
 };
 
-FlashGotDMMac.prototype.createJob = function(links,opType) {
+GrabitDMMac.prototype.createJob = function(links,opType) {
   const referrer = this.getReferrer(links);
   var job = "tell application \""+ this.macAppName+ "\"\n";
   for (var j = 0, len = links.length; j < len; j++) {
@@ -1017,7 +1017,7 @@ FlashGotDMMac.prototype.createJob = function(links,opType) {
 
 
 // *** Custom DMS **************************************************************
-function FlashGotDMCust(name, codeName) {
+function GrabitDMCust(name, codeName) {
   if (arguments.length == 0 || (!name) || (!name.length)) return;
   name = name.replace(/,/g, " ");
   if (codeName) {
@@ -1027,15 +1027,15 @@ function FlashGotDMCust(name, codeName) {
   this.prefsBase = "custom." + this.codeName + ".";
 }
 
-FlashGotDMCust.init = function() {
+GrabitDMCust.init = function() {
   const names = fg.getPref("custom", "").split(/\s*,\s*/);
   for (var j = names.length; j-->0;) {
-    new FlashGotDMCust(names[j]);
+    new GrabitDMCust(names[j]);
   }
 }
 
-FlashGotDMCust.persist = function() {
-  const dms = FlashGotDM.dms;
+GrabitDMCust.persist = function() {
+  const dms = GrabitDM.dms;
   const cdms = [];
   for (var j = dms.length; j-->0;) {
     if (dms[j].custom) cdms.push(dms[j].name);
@@ -1043,20 +1043,20 @@ FlashGotDMCust.persist = function() {
   fg.setPref("custom", cdms.join(","));
 }
 
-FlashGotDMCust.prototype = new FlashGotDM();
-FlashGotDMCust.constructor = FlashGotDM;
+GrabitDMCust.prototype = new GrabitDM();
+GrabitDMCust.constructor = GrabitDM;
 
-delete FlashGotDMCust.prototype.launchSupportTest;
-delete FlashGotDMCust.prototype.exeFile;
-FlashGotDMCust.prototype.PLACEHOLDERS = ["URL", "COMMENT", "REFERER", "COOKIE", "FOLDER", "FNAME", "HEADERS", "POST", "RAWPOST", "ULIST", "UFILE", "CFILE", "USERPASS", "UA"];
+delete GrabitDMCust.prototype.launchSupportTest;
+delete GrabitDMCust.prototype.exeFile;
+GrabitDMCust.prototype.PLACEHOLDERS = ["URL", "COMMENT", "REFERER", "COOKIE", "FOLDER", "FNAME", "HEADERS", "POST", "RAWPOST", "ULIST", "UFILE", "CFILE", "USERPASS", "UA"];
 
-FlashGotDMCust.prototype.custom = true;
-FlashGotDMCust.prototype. _supported = true;
-FlashGotDMCust.prototype.cookieSupport = false;
-FlashGotDMCust.prototype.postSupport = true;
-FlashGotDMCust.prototype.askPath = [true, true, true];
+GrabitDMCust.prototype.custom = true;
+GrabitDMCust.prototype. _supported = true;
+GrabitDMCust.prototype.cookieSupport = false;
+GrabitDMCust.prototype.postSupport = true;
+GrabitDMCust.prototype.askPath = [true, true, true];
 
-FlashGotDMCust.prototype.__defineGetter__("exeFile",function() {
+GrabitDMCust.prototype.__defineGetter__("exeFile",function() {
   try {
     return fg.prefs.getComplexValue(this.prefsBase + "exe",
       CI.nsILocalFile);
@@ -1064,7 +1064,7 @@ FlashGotDMCust.prototype.__defineGetter__("exeFile",function() {
     return null;
   }
 });
-FlashGotDMCust.prototype.__defineSetter__("exeFile",function(v) {
+GrabitDMCust.prototype.__defineSetter__("exeFile",function(v) {
   try {
     if (v) {
       fg.prefs.setComplexValue(this.prefsBase + "exe",
@@ -1076,12 +1076,12 @@ FlashGotDMCust.prototype.__defineSetter__("exeFile",function(v) {
   return null;
 });
 
-FlashGotDMCust.prototype.__defineGetter__("argsTemplate", function() {
+GrabitDMCust.prototype.__defineGetter__("argsTemplate", function() {
   if (this.forcedTemplate) return this.forcedTemplate;
   var t = fg.getPref(this.prefsBase+"args", "[URL]");
   return /['"`]/.test(t) ? this.argsTemplate = t : t;
 });
-FlashGotDMCust.prototype.__defineSetter__("argsTemplate",function(v) {
+GrabitDMCust.prototype.__defineSetter__("argsTemplate",function(v) {
   if (!v) {
     v = "";
   } else {
@@ -1093,7 +1093,7 @@ FlashGotDMCust.prototype.__defineSetter__("argsTemplate",function(v) {
 });
 
 
-FlashGotDMCust.prototype.download = function(links, opType) {
+GrabitDMCust.prototype.download = function(links, opType) {
   const t = this.argsTemplate;
   this.cookieSupport = /\[.*?(?:CFILE|COOKIE).*?\]/.test(t);
   this.askPath[opType] = /\[.*?FOLDER.*?\]/.test(t);
@@ -1121,15 +1121,15 @@ FlashGotDMCust.prototype.download = function(links, opType) {
   }
   links.exeFile= (exeFile ||
     (exeFile = this.exeFile = this.locateExeFile())) ? exeFile : null;
-  FlashGotDM.prototype.download.call(this, links, opType);
+  GrabitDM.prototype.download.call(this, links, opType);
 };
 
-FlashGotDMCust.prototype.locateExeFile = function(name) {
+GrabitDMCust.prototype.locateExeFile = function(name) {
 
 
   if (!name) name = this.name;
   var title = fg.getString("custom.exeFile");
-  title = 'FlashGot (' + name + ') - ' + title;
+  title = 'Grabit (' + name + ') - ' + title;
 
   const fp = CC["@mozilla.org/filepicker;1"].createInstance(CI.nsIFilePicker);
   const win = this.getWindow();
@@ -1146,7 +1146,7 @@ FlashGotDMCust.prototype.locateExeFile = function(name) {
   return null;
 };
 
-FlashGotDMCust.prototype._addParts = function(a, s) {
+GrabitDMCust.prototype._addParts = function(a, s) {
   var parts = s.split(/\s+/);
   var k, p;
   for (k in parts) {
@@ -1156,7 +1156,7 @@ FlashGotDMCust.prototype._addParts = function(a, s) {
   }
 };
 
-FlashGotDMCust.prototype.makeArgs = function(parms) {
+GrabitDMCust.prototype.makeArgs = function(parms) {
   const args = [];
   var t = this.argsTemplate;
   var v, len, alt;
@@ -1202,22 +1202,22 @@ FlashGotDMCust.prototype.makeArgs = function(parms) {
   return args;
 };
 
-FlashGotDMCust.prototype.createJob = function(links, opType) {
+GrabitDMCust.prototype.createJob = function(links, opType) {
   return { links: links, opType: opType };
 };
 
-FlashGotDMCust.prototype.shellEsc = function(s) {
+GrabitDMCust.prototype.shellEsc = function(s) {
   return s ? '"' + s.replace(/"/g, '""') + '"' : null;
 }
 
-FlashGotDMCust.prototype.winEscHack = function(s) {
+GrabitDMCust.prototype.winEscHack = function(s) {
   // hack for bug at http://mxr.mozilla.org/seamonkey/source/xpcom/threads/nsProcessCommon.cpp#149
   var rstr = /^\w+:\/+/.test(s) ? "# " : " ";
   return (/[;&=]/.test(s) && !/\s/.test(s)) // "=" and ";" are command line separators on win!!!
     ? s + rstr : s; // we add a space to force escaping
 }
 
-FlashGotDMCust.prototype.performJob = function(job) {
+GrabitDMCust.prototype.performJob = function(job) {
   const links = job.links;
   const exeFile = links.exeFile;
   if (links.length < 1 || !exeFile) return false;
@@ -1275,13 +1275,13 @@ FlashGotDMCust.prototype.performJob = function(job) {
   }
   return true;
 };
-FlashGotDMCust.prototype.checkExePlatform = function(exeFile) {
+GrabitDMCust.prototype.checkExePlatform = function(exeFile) {
   return exeFile;
 };
-FlashGotDMCust.prototype.createExecutable = function() {
+GrabitDMCust.prototype.createExecutable = function() {
   return false;
 };
-// End FlashGotDMCust.prototype
+// End GrabitDMCust.prototype
 
 // *****************************************************************************
 // END DMS CLASSES
@@ -1289,19 +1289,19 @@ FlashGotDMCust.prototype.createExecutable = function() {
 
 // DMS initialization
 
-FlashGotDM.initDMS = function() {
+GrabitDM.initDMS = function() {
   const isWin = fg.isWindows;
   var dm;
 
-  new FlashGotDM("BitComet");
+  new GrabitDM("BitComet");
 
-  dm = new FlashGotDM("Download Accelerator Plus");
+  dm = new GrabitDM("Download Accelerator Plus");
   dm.nativeUI = "#dapctxmenu1, #dapctxmenu2";
 
   dm.performDownload =  function(links, opType) {
     if (!("IDAPComponent" in CI)) {
       this.log("DAP extension not found, falling back to IE integration");
-      FlashGotDM.prototype.performDownload.apply(this, arguments);
+      GrabitDM.prototype.performDownload.apply(this, arguments);
       return;
     }
 
@@ -1335,10 +1335,10 @@ FlashGotDM.initDMS = function() {
           this.log("DAP: no browser window found");
           return;
         }
-        var f = bwin.document.getElementById("_flashgot_iframe");
+        var f = bwin.document.getElementById("_grabit_iframe");
         if (!f) {
           f =  bwin.document.createElement("iframe");
-          f.id = "_flashgot_iframe";
+          f.id = "_grabit_iframe";
           f.setAttribute("type", "content");
           f.style.display = "none";
         }
@@ -1387,9 +1387,9 @@ FlashGotDM.initDMS = function() {
 
 
 
-  new FlashGotDM("Download Master");
+  new GrabitDM("Download Master");
 
-  for (dm of [new FlashGotDM("DTA"), new FlashGotDM("DTA (Turbo)")]) {
+  for (dm of [new GrabitDM("DTA"), new GrabitDM("DTA (Turbo)")]) {
     dm.__defineGetter__("_supported", function() {
       delete this._supported;
       return this._supported = (function() {
@@ -1531,14 +1531,14 @@ FlashGotDM.initDMS = function() {
     }
   }
 
-  new FlashGotDM("FlashGet");
-  new FlashGotDM("FlashGet 2");
+  new GrabitDM("FlashGet");
+  new GrabitDM("FlashGet 2");
 
   try {
     dm = null;
     const FG_CTRID = "@flashget.com/FlashgetXpiEx;1";
     if (FG_CTRID in CC && ("FlvDetector" in CC[FG_CTRID].createInstance(CI.IFlashgetXpi))) {
-      dm = new FlashGotDM("FlashGet 3");
+      dm = new GrabitDM("FlashGet 3");
       dm._supported = true;
       dm.performDownload = function(links, opType) {
         const obj = CC[FG_CTRID].createInstance(CI.IFlashgetXpi);
@@ -1569,22 +1569,22 @@ FlashGotDM.initDMS = function() {
   } catch(e) {
     dm = null;
   }
-  dm = dm || new FlashGotDM("FlashGet 2.x");
+  dm = dm || new GrabitDM("FlashGet 2.x");
   dm.nativeUI = "#flashgetSingle, #flashgetAll, #flashgetSep, #flashget3Single, #flashget3All, #flashget3Sep";
 
 
-  dm = new FlashGotDM("Free Download Manager");
+  dm = new GrabitDM("Free Download Manager");
 
-  new FlashGotDM("FreshDownload");
+  new GrabitDM("FreshDownload");
 
 
-  dm = new FlashGotDM("GetRight");
+  dm = new GrabitDM("GetRight");
   dm.metalinkSupport = true;
   dm.download = function(links, opType) {
     if (opType == fg.OP_ONE && !fg.getPref("GetRight.quick")) {
       opType = fg.OP_SEL;
     }
-    FlashGotDM.prototype.download.call(this, links, opType);
+    GrabitDM.prototype.download.call(this, links, opType);
   };
 
   dm.createJob = function(links, opType) {
@@ -1595,7 +1595,7 @@ FlashGotDM.initDMS = function() {
 
     switch (opType) {
       case fg.OP_ONE:
-        var job = FlashGotDM.prototype.createJob.call(this, links, opType,
+        var job = GrabitDM.prototype.createJob.call(this, links, opType,
           fg.getPref("GetRight.old") ? ["old"] : null
           ).replace(/; /g, ";");
         return job;
@@ -1651,7 +1651,7 @@ FlashGotDM.initDMS = function() {
           this.updateProgress(links, j, len);
         }
         var file = fg.tmpDir.clone();
-        file.append("flashgot.grx");
+        file.append("grabit.grx");
         file.createUnique(0, B8('600'));
         var charset=null;
         try {
@@ -1673,12 +1673,12 @@ FlashGotDM.initDMS = function() {
   };
   dm.askPath=[false,true,true];
 
-  new FlashGotDM("GigaGet");
+  new GrabitDM("GigaGet");
 
-  new FlashGotDM("HiDownload");
-  new FlashGotDM("InstantGet");
+  new GrabitDM("HiDownload");
+  new GrabitDM("InstantGet");
 
-  dm = new FlashGotDM("iGetter Win");
+  dm = new GrabitDM("iGetter Win");
   dm.nativeUI = "#all-igetter, #igetter-link";
   dm.__defineGetter__("supported", function() {
     if (typeof(this._supported) == "boolean") return this._supported;
@@ -1749,21 +1749,21 @@ FlashGotDM.initDMS = function() {
     }
   };
 
-  new FlashGotDM("Internet Download Accelerator");
-  (new FlashGotDM("Internet Download Manager")).postSupport = true;
+  new GrabitDM("Internet Download Accelerator");
+  (new GrabitDM("Internet Download Manager")).postSupport = true;
 
-  var lg2002 = new FlashGotDM("LeechGet 2002");
-  var lg2004 = new FlashGotDM("LeechGet");
+  var lg2002 = new GrabitDM("LeechGet 2002");
+  var lg2004 = new GrabitDM("LeechGet");
 
   lg2004.createJob = lg2002.createJob = function(links, opType) {
     var referrer;
     switch (opType) {
       case fg.OP_ONE:
-        return FlashGotDM.prototype.createJob.call(this, links,
+        return GrabitDM.prototype.createJob.call(this, links,
             links.quickDownload ? fg.OP_ONE : fg.OP_SEL);
 
       case fg.OP_SEL:
-        var htmlDoc="<html><head><title>FlashGot selection</title></head><body>";
+        var htmlDoc="<html><head><title>Grabit selection</title></head><body>";
         var l;
         for (var j=0, len=links.length; j<len; j++) {
           l = links[j];
@@ -1790,15 +1790,15 @@ FlashGotDM.initDMS = function() {
     return this.createJobHeader({ length: 0, folder: "" },opType) + referrer + "\n";
   };
 
-  new FlashGotDM("Net Transport");
-  new FlashGotDM("Net Transport 2");
-  new FlashGotDM("NetAnts");
-  new FlashGotDM("Mass Downloader");
+  new GrabitDM("Net Transport");
+  new GrabitDM("Net Transport 2");
+  new GrabitDM("NetAnts");
+  new GrabitDM("Mass Downloader");
 
-  dm = new FlashGotDM("Orbit");
+  dm = new GrabitDM("Orbit");
   dm.nativeUI = "#OrbitDownloadUp, #OrbitDownload, #OrbitDownloadAll, #OrbidDownload_menuitem, #OrbitDownloadAll_menuitem";
 
-  dm = new FlashGotDM("ReGet");
+  dm = new GrabitDM("ReGet");
   dm.postSupport = true;
   if("@reget.com/regetextension;1" in CC) {
     try {
@@ -1839,7 +1839,7 @@ FlashGotDM.initDMS = function() {
   }
 
   if (isWin) {
-    dm = new FlashGotDMCust("Retriever");
+    dm = new GrabitDMCust("Retriever");
     dm.cookieSupport = true;
     dm.askPath = ASK_NEVER;
     dm.custom = false;
@@ -1864,11 +1864,11 @@ FlashGotDM.initDMS = function() {
 
     dm.makeArgs = function(parms) {
       return ["-jar", this.jarPath].concat(
-        FlashGotDMCust.prototype.makeArgs.apply(this, arguments)
+        GrabitDMCust.prototype.makeArgs.apply(this, arguments)
       );
     };
 
-    dm = new FlashGotDMCust("DownloadStudio");
+    dm = new GrabitDMCust("DownloadStudio");
     dm.cookieSupport = true;
     dm.askPath = ASK_NEVER;
     dm.custom = false;
@@ -1899,15 +1899,15 @@ FlashGotDM.initDMS = function() {
   const httpFtpValidator = function(url) {
     return /^(http:|ftp:)/.test(url);
   };
-  dm = new FlashGotDM("Star Downloader");
+  dm = new GrabitDM("Star Downloader");
   dm.cookieSupport = false;
   dm.isValidLink = httpFtpValidator;
 
-  dm = new FlashGotDM("TrueDownloader");
+  dm = new GrabitDM("TrueDownloader");
   dm.isValidLink = httpFtpValidator;
 
 
-  dm = new FlashGotDM("Thunder");
+  dm = new GrabitDM("Thunder");
   dm.nativeUI = "#ThunderDownloadUp, #ThunderDownload, #ThunderDownloadAll";
   dm.thunderDelay = 3000;
   dm.performDownload = function(links, opType) {
@@ -1926,11 +1926,11 @@ FlashGotDM.initDMS = function() {
     } catch(e) {}
     postCall();
   }
-  new FlashGotDM("Thunder (Old)");
+  new GrabitDM("Thunder (Old)");
 
 
   if (isWin) {
-    dm = new FlashGotDM("WellGet");
+    dm = new GrabitDM("WellGet");
     dm.autoselect = false;
     dm.getRelativeExe = function() {
       try {
@@ -1960,13 +1960,13 @@ FlashGotDM.initDMS = function() {
     };
     dm.createJob = function(links, opType) {
       var wellGetExe = this.getRelativeExe();
-      return FlashGotDM.prototype.createJob.call(this, links, opType,
+      return GrabitDM.prototype.createJob.call(this, links, opType,
         wellGetExe ? [wellGetExe.path] : null);
     };
     dm.shouldList = function() { return true; }
   }
 
-  dm = new FlashGotDM("JDownloader");
+  dm = new GrabitDM("JDownloader");
   dm.askPath = [true, true, true];
   dm.cookieSupport = true;
   dm.customSupportCheck = function() {
@@ -2087,7 +2087,7 @@ FlashGotDM.initDMS = function() {
 
     const data = [
       "autostart=" + (this.getPref("autostart", true) ? "1" : "0"),
-      "package=" + encodeURIComponent(links.document && links.document.title || "FlashGot")
+      "package=" + encodeURIComponent(links.document && links.document.title || "Grabit")
     ];
     const referrer = this.getReferrer(links);
     if (referrer) data.push("referer=" + encodeURIComponent(referrer));
@@ -2144,21 +2144,21 @@ FlashGotDM.initDMS = function() {
     }
   };
 
-  dm = new FlashGotDMX("Aria", "aria", "[-r REFERER] [-d FOLDER] -g [URL]");
+  dm = new GrabitDMX("Aria", "aria", "[-r REFERER] [-d FOLDER] -g [URL]");
   dm.createJob = function(links,opType) {
-    return FlashGotDMX.prototype.createJob.call(this,links,opType) + "\nsleep 4\n" + this.unixCmd + " -s &\n";
+    return GrabitDMX.prototype.createJob.call(this,links,opType) + "\nsleep 4\n" + this.unixCmd + " -s &\n";
   };
 
-  dm = new FlashGotDMX("Downloader 4 X (nt)", "nt");
+  dm = new GrabitDMX("Downloader 4 X (nt)", "nt");
   dm.createJob = function(links, opType) {
     return this.unixCmd + "&\nsleep 1\n" +
       (links.folder && links.folder._fgSelected
       ? this.unixCmd + " -d " + this.shellEsc(links.folder) + "\n"
       :"") +
-      FlashGotDMX.prototype.createJob.call(this, links, opType);
+      GrabitDMX.prototype.createJob.call(this, links, opType);
   };
 
-  dm = new FlashGotDMX("Downloader 4 X", "d4x", "[--referer REFERER] [-a URL] [--al POST] [COOKIE]");
+  dm = new GrabitDMX("Downloader 4 X", "d4x", "[--referer REFERER] [-a URL] [--al POST] [COOKIE]");
   dm.askPath = [false, true, true];
   dm.cookieSupport = true;
   dm.createJob = function(links, opType) {
@@ -2211,7 +2211,7 @@ FlashGotDM.initDMS = function() {
     return job;
   };
 
-  dm = new FlashGotDMX("GNOME Gwget","gwget");
+  dm = new GrabitDMX("GNOME Gwget","gwget");
   dm.askPath = ASK_NEVER;
   dm.createJob = function(links, opType) {
     if (opType == fg.OP_ALL) {
@@ -2219,25 +2219,25 @@ FlashGotDM.initDMS = function() {
       links[0].href = links.document ? links.document.URL : this.getReferrer(links);
       opType = fg.OP_ONE;
     }
-    return FlashGotDMX.prototype.createJob.call(this, links, opType)
+    return GrabitDMX.prototype.createJob.call(this, links, opType)
   }
 
-  dm = new FlashGotDMX("FlareGet", "flareget",
+  dm = new GrabitDMX("FlareGet", "flareget",
       "[URL] [-o FNAME] [-c COOKIE] [-l CFILE] [-a USERPASS] [-u UA] [-r REFERER] [-d POST]",
       "/opt/flareget");
   dm.askPath = ASK_NEVER;
 
-  dm = new FlashGotDMX("KDE KGet","kget", "[ULIST]");
+  dm = new GrabitDMX("KDE KGet","kget", "[ULIST]");
   dm.askPath = ASK_NEVER;
 
   if (isWin) {
-    new FlashGotDM("wxDownload Fast");
+    new GrabitDM("wxDownload Fast");
   } else {
-    dm = new FlashGotDMX("wxDownload Fast", "wxdfast", "[-reference REFERER] [-destination FOLDER] [-list UFILE]");
+    dm = new GrabitDMX("wxDownload Fast", "wxdfast", "[-reference REFERER] [-destination FOLDER] [-list UFILE]");
     dm.askPath = ASK_NEVER;
   }
 
-  dm = new FlashGotDMX("Axel", "axel", '-a -n 4 [-o FNAME] [URL]');
+  dm = new GrabitDMX("Axel", "axel", '-a -n 4 [-o FNAME] [URL]');
   dm.terminal = true;
   dm.createJob = function(links, opType) {
     this.argsTemplate = this.argsTemplate.replace(/\b-n \d+/, "-n " + this.getPref("connections", 4));
@@ -2259,22 +2259,22 @@ FlashGotDM.initDMS = function() {
   }
 
 
-  dm = new FlashGotDMX("cURL", "curl", '-C - -L [-o FNAME|-O] [--referer REFERER] [-b COOKIE] [-d POST] [--anyauth -u USERPASS] [--user-agent UA] [URL]');
+  dm = new GrabitDMX("cURL", "curl", '-C - -L [-o FNAME|-O] [--referer REFERER] [-b COOKIE] [-d POST] [--anyauth -u USERPASS] [--user-agent UA] [URL]');
   dm.postSupport = true;
   dm.authURLSupport = false;
   dm.terminal = true;
   if (fg.isMac) dm.autoselect = false;
 
-  dm = new FlashGotDMX("FatRat", "fatrat", "[ULIST]");
+  dm = new GrabitDMX("FatRat", "fatrat", "[ULIST]");
   dm.askPath = ASK_NEVER;
 
-  dm = new FlashGotDMX("MultiGet", "multiget", '[url=URL] [refer=REFERER]');
+  dm = new GrabitDMX("MultiGet", "multiget", '[url=URL] [refer=REFERER]');
   dm.askPath = ASK_NEVER;
 
-  dm = new FlashGotDMX("Prozilla", "proz", '-r [-P FOLDER] [URL]');
+  dm = new GrabitDMX("Prozilla", "proz", '-r [-P FOLDER] [URL]');
   dm.terminal = true;
 
-  dm = new FlashGotDMX("Wget", "wget", '-c [-O FNAME] [--directory-prefix=FOLDER] [--referer=REFERER] [--post-data=POST] [--load-cookies=CFILE] [--header=Cookie:COOKIE] [--input-file=UFILE] [--user-agent=UA] [URL]');
+  dm = new GrabitDMX("Wget", "wget", '-c [-O FNAME] [--directory-prefix=FOLDER] [--referer=REFERER] [--post-data=POST] [--load-cookies=CFILE] [--header=Cookie:COOKIE] [--input-file=UFILE] [--user-agent=UA] [URL]');
   dm.postSupport = true;
   dm.terminal = true;
   dm.__defineGetter__("_trustServerOpt", function() {
@@ -2299,7 +2299,7 @@ FlashGotDM.initDMS = function() {
 
   var ugetTemplate = '[--http-cookie-file=CFILE] [--http-post-data=POST] [--http-referer=REFERER] [--filename=FNAME] [--input-file=UFILE]';
   if (fg.isWindows) {
-    dm = new FlashGotDMCust("uGet", "Uget");
+    dm = new GrabitDMCust("uGet", "Uget");
     dm.argsTemplate = ugetTemplate;
     dm.cookieSupport = true;
     dm.askPath = ASK_NEVER;
@@ -2329,7 +2329,7 @@ FlashGotDM.initDMS = function() {
 
 
   } else {
-    dm = new FlashGotDMX("uGet", "uget-gtk",  ugetTemplate);
+    dm = new GrabitDMX("uGet", "uget-gtk",  ugetTemplate);
     dm._codeName = "Uget";
     dm.postSupport = true;
     dm.askPath = ASK_NEVER;
@@ -2345,7 +2345,7 @@ FlashGotDM.initDMS = function() {
 
   var xdmTemplate = '[-u URL] -m [-c COOKIE] [-r REFERER]';
   if (fg.isWindows) {
-    dm = new FlashGotDMCust("XDM");
+    dm = new GrabitDMCust("XDM");
     dm.argsTemplate = xdmTemplate;
     dm.cookieSupport = true;
     dm.askPath = ASK_NEVER;
@@ -2375,12 +2375,12 @@ FlashGotDM.initDMS = function() {
 
 
   } else {
-    dm = new FlashGotDMX("XDM", "xdman",  xdmTemplate);
+    dm = new GrabitDMX("XDM", "xdman",  xdmTemplate);
     dm.askPath = ASK_NEVER;
   }
 
 
-  dm = new FlashGotDM("pyLoad");
+  dm = new GrabitDM("pyLoad");
   dm.askPath = ASK_NEVER;
   dm.cookieSupport = true;
   dm.autoselect = false;
@@ -2430,7 +2430,7 @@ FlashGotDM.initDMS = function() {
     if (links.some(function(l) { return "userPass" in l }))
       pp.httpauth = links.map(function(l) { return l.userPass || '' });
 
-    var pkg = (links.document && links.document.title || "FlashGot");
+    var pkg = (links.document && links.document.title || "Grabit");
     // filter out all non-ASCII characters, because pyLoad 0.4.9 crashes when logging a non-ASCII character (e.g. '»')
     pkg = encodeURIComponent(pkg.replace(new RegExp("[^\x20-\x7E]","im"),""));
 
@@ -2465,15 +2465,15 @@ FlashGotDM.initDMS = function() {
     r.send(data);
   };
 
-  dm = new FlashGotDMX("Aria 2", "aria2c", '--continue [-d FOLDER] [-o FNAME] [--referer=REFERER] [--load-cookies=CFILE] [--input-file=UFILE] [URL]');
+  dm = new GrabitDMX("Aria 2", "aria2c", '--continue [-d FOLDER] [-o FNAME] [--referer=REFERER] [--load-cookies=CFILE] [--input-file=UFILE] [URL]');
   dm.terminal = true;
 
-  dm = new FlashGotDMX("Steadyflow", "steadyflow", '[add URL]');
+  dm = new GrabitDMX("Steadyflow", "steadyflow", '[add URL]');
   dm.askPath = ASK_NEVER;
 
 
     if (fg.isWindows) {
-        dm = new FlashGotDMCust("ZigzagDownLoader");
+        dm = new GrabitDMCust("ZigzagDownLoader");
         dm.cookieSupport = true;
         dm.custom = false;
         dm._supported = null;
@@ -2502,16 +2502,16 @@ FlashGotDM.initDMS = function() {
           }
         };
       } else {
-        dm = new FlashGotDMX("ZigzagDownLoader", "zdl", "--stream [URL] [FNAME] [FOLDER] [CFILE] [COOKIE] [REFERER]");
+        dm = new GrabitDMX("ZigzagDownLoader", "zdl", "--stream [URL] [FNAME] [FOLDER] [CFILE] [COOKIE] [REFERER]");
       }
 
 
 
   if (fg.isMac) {
-    dm = new FlashGotDMX("Progressive Downloader", "$(defaults read com.PS.PSD psAppPath)", "-add [url UFILE] [cookie CFILE] [referer REFERER] [destination FOLDER]");
+    dm = new GrabitDMX("Progressive Downloader", "$(defaults read com.PS.PSD psAppPath)", "-add [url UFILE] [cookie CFILE] [referer REFERER] [destination FOLDER]");
   }
 
-  function FlashGotDMSD(version) {
+  function GrabitDMSD(version) {
     this._initMac(typeof(version) == "number" && version > 3 ? "Speed Download" : ("Speed Download " + version), "Spee");
     this.version = version;
     if (version > 2 || version == "Lite") {
@@ -2520,8 +2520,8 @@ FlashGotDM.initDMS = function() {
     }
   };
 
-  FlashGotDMSD.prototype=new FlashGotDMMac();
-  FlashGotDMSD.prototype.createJob = function(links,opType) {
+  GrabitDMSD.prototype=new GrabitDMMac();
+  GrabitDMSD.prototype.createJob = function(links,opType) {
     var urlList = [];
     var cookieList = [];
     var l;
@@ -2556,13 +2556,13 @@ FlashGotDM.initDMS = function() {
   };
 
   if (fg.getPref("oldSD", false)) {
-    new FlashGotDMSD(2);
-    new FlashGotDMSD(3);
+    new GrabitDMSD(2);
+    new GrabitDMSD(3);
   }
-  new FlashGotDMSD(3.5);
-  new FlashGotDMSD("Lite");
+  new GrabitDMSD(3.5);
+  new GrabitDMSD("Lite");
 
-  dm = new FlashGotDMMac("Leech", "com.manytricks.Leech");
+  dm = new GrabitDMMac("Leech", "com.manytricks.Leech");
   dm.askPath = [true, true, true];
   dm.cookieSupport = dm.postSupport = true;
   dm.createJob = function(links, opType) {
@@ -2596,7 +2596,7 @@ FlashGotDM.initDMS = function() {
     return job;
   }
 
-  dm = new FlashGotDMMac("iGetter", "iGET");
+  dm = new GrabitDMMac("iGetter", "iGET");
   dm.cookieSupport = true;
   dm.nativeUI = ["sep", "link", "sel", "all"].map(
     function(s) { return "#context-igetter-" + s; }
@@ -2620,7 +2620,7 @@ FlashGotDM.initDMS = function() {
       "end tell\n";
   };
 
-  dm = new FlashGotDMMac("Folx 2", "com.eltima.Folx");
+  dm = new GrabitDMMac("Folx 2", "com.eltima.Folx");
   dm.nativeUI = "#folxAddURL, #folxAddAllURLs, #folxAddSelected";
   dm.cookieSupport = true;
   dm.createJob = function(links, opType) {
@@ -2646,9 +2646,9 @@ FlashGotDM.initDMS = function() {
     return job;
   }
 
-  dm = new FlashGotDMMac("Folx", "com.eltima.Folx3");
+  dm = new GrabitDMMac("Folx", "com.eltima.Folx3");
   ["nativeUI", "cookieSupport", "createJob"].forEach(function(p) {
-    dm[p] = FlashGotDM.dms["Folx 2"][p];
+    dm[p] = GrabitDM.dms["Folx 2"][p];
   });
 
   dm.performDownload = function(links, opType) {
@@ -2658,7 +2658,7 @@ FlashGotDM.initDMS = function() {
   };
 
   if ("nsIDownloadManager" in CI) {
-    dm = new FlashGotDM(fg.getString("dm.builtIn"));
+    dm = new GrabitDM(fg.getString("dm.builtIn"));
     dm._codeName = "_Built_In_";
     dm._supported = true;
     dm.priority = "zzz"; // put on the bottom of the list
@@ -2780,7 +2780,7 @@ FlashGotDM.initDMS = function() {
       folder.initWithPath(links.folder);
       var mozAddDownload;
       try { // Fx 26 and above
-        Components.utils.import("chrome://flashgot/content/JSDownloadsAPI.jsm");
+        Components.utils.import("chrome://grabit/content/JSDownloadsAPI.jsm");
       } catch (e) {
         fg.log(e);
         JSDownloadsAPI = null;
@@ -2899,7 +2899,7 @@ FlashGotDM.initDMS = function() {
     };
   }
 
-  FlashGotDMCust.init();
+  GrabitDMCust.init();
 
   fg.sortDMS();
 

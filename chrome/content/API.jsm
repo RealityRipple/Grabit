@@ -1,9 +1,9 @@
-var EXPORTED_SYMBOLS = ["FlashGot"];
+var EXPORTED_SYMBOLS = ["Grabit"];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-var FlashGot = {
+var Grabit = {
   download: function(links) {
     let objects = {};
     if ("document" in links) {
@@ -12,7 +12,7 @@ var FlashGot = {
     }
     try {
      Cc["@mozilla.org/childprocessmessagemanager;1"].getService(Ci.nsIMessageSender)
-      .sendAsyncMessage("FlashGot::download", { links: links }, objects);
+      .sendAsyncMessage("Grabit::download", { links: links }, objects);
     } finally {
       if ("document" in objects) {
         links.document = objects.document;

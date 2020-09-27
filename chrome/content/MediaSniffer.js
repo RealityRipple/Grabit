@@ -20,7 +20,7 @@
 ***** END LICENSE BLOCK *****/
 
 LAZY_INCLUDE("Youtube");
-var gFlashGotService = Components.classes["@maone.net/flashgot-service;1"].getService().wrappedJSObject;
+var gGrabitService = Components.classes["@mozilla.org/grabit-service;1"].getService().wrappedJSObject;
 
 var MediaSniffer = {
 
@@ -111,13 +111,13 @@ var MediaSniffer = {
   },
 
   _set_current_url: function (w, url) {
-    w._flashgotMediaCurrentUrl = url;
+    w._grabitMediaCurrentUrl = url;
   },
 
   observe: function (channel, topic, data) {
     if (channel instanceof CI.nsIHttpChannel && Components.isSuccessCode(channel.status)) {
       try {
-        // |extras.window|, when |extras| exists as the "flashgot.media.extras"
+        // |extras.window|, when |extras| exists as the "grabit.media.extras"
         // property of |channel|, is never null and always an actual (as opposed
         // to potential - see |yt_win| below) YouTube window - either a top-level
         // one (i.e. a browser tab/window) if we're on YouTube (e.g. /watch?v=VIDEO_ID),
@@ -132,10 +132,10 @@ var MediaSniffer = {
         var extras = {}, win, yt_win, media, map, location;
         try {
           if (channel instanceof CI.nsIPropertyBag && channel instanceof CI.nsIWritablePropertyBag) {
-            extras = channel.getProperty("flashgot.media.extras").wrappedJSObject || extras;
+            extras = channel.getProperty("grabit.media.extras").wrappedJSObject || extras;
             win = yt_win = extras.window;
             if (win) {
-              channel.deleteProperty("flashgot.media.extras");
+              channel.deleteProperty("grabit.media.extras");
               win = win.top;
             }
           }
@@ -145,9 +145,9 @@ var MediaSniffer = {
           if (!yt_win) return;
           win = yt_win.top;
         }
-        media = win._flashgotMedia || (win._flashgotMedia = []);
+        media = win._grabitMedia || (win._grabitMedia = []);
         location = win.location.href.replace(/#.*/, '');
-        if (("_location" in media) && media._location !== location) win._flashgotMedia = media = [];
+        if (("_location" in media) && media._location !== location) win._grabitMedia = media = [];
         media._location = location;
         map = media._map || (media._map = {});
 
@@ -155,7 +155,7 @@ var MediaSniffer = {
         // For top-level windows we use onLocationChange.
         if (yt_win !== win
           // No need to check for YouTube (again) if it's our parsed stream.
-          && ! extras["flashgot::parsed"]
+          && ! extras["grabit::parsed"]
           // Pass stream URLs through.
           && ! Youtube.is_stream_url(channel.URI.spec)
           // Ignore iframes on YouTube itself (comments iframe atm).
@@ -168,10 +168,10 @@ var MediaSniffer = {
         // YouTube - 403 Forbidden. Probably the signature algorithm has changed.
         if (channel.responseStatus === 403 && Youtube.is_stream_url(channel.URI.spec))
         {
-          fg.log("YouTube 403: video " + extras["flashgot::video_id"] + ": outdated signature function? URL: " + channel.URI.spec);
-          if (extras["flashgot::parsed"] && !win.flashgotRefreshedYoutubeSignature) {
+          fg.log("YouTube 403: video " + extras["grabit::video_id"] + ": outdated signature function? URL: " + channel.URI.spec);
+          if (extras["grabit::parsed"] && !win.grabitRefreshedYoutubeSignature) {
             if (fg.getPref("media.YouTube.decode_signature_func.auto", true)
-                && (win.flashgotRefreshedYoutubeSignature = 
+                && (win.grabitRefreshedYoutubeSignature = 
                       Youtube.refresh_signature_func(yt_win, function() {
                         MediaSniffer.checkYoutube(yt_win, null, true);
                       })
@@ -204,12 +204,12 @@ var MediaSniffer = {
             ? channel.contentType
             : Youtube.get_stream_content_type(channel.URI.spec);
           if (Object.keys(map).some(function(url){return !map[url].parsed && Youtube.stream_url_equals(url, channel.URI.spec);})) {
-            if ( ! extras["flashgot::parsed"] && ! /^audio\//.test(contentType)) {
+            if ( ! extras["grabit::parsed"] && ! /^audio\//.test(contentType)) {
               this._set_current_url(win, channel.URI.spec);
             }
             return;
           }
-          extras["flashgot::Youtube"] = Youtube; // for flashgotOverlay.js
+          extras["grabit::Youtube"] = Youtube; // for grabitOverlay.js
         }
         if (!contentType) {
           contentType = channel.contentType;
@@ -284,7 +284,7 @@ var MediaSniffer = {
             contentType = typeInfo.contentType;
 
             if (/-ms-/.test(contentType) && /(?:\.(?:youtube|ytimg)\.com|doubleclick\.net)$/.test(channel.URI.host)
-              && gFlashGotService.getPref("media.skipAds", true))
+              && gGrabitService.getPref("media.skipAds", true))
               return;
 
             if (this.badTypesRx.test(contentType)) return;
@@ -303,9 +303,9 @@ var MediaSniffer = {
             if (extras.quality) humanType = extras.quality + " " + humanType;
 
             // YouTube seek timestamps.
-            extras["flashgot::seek_pos"] = 0;
+            extras["grabit::seek_pos"] = 0;
             if (Youtube.is_stream_url(url) && /[?&]begin=(\d+)/.test(url)) {
-              extras["flashgot::seek_pos"] = parseInt(RegExp.$1, 10);
+              extras["grabit::seek_pos"] = parseInt(RegExp.$1, 10);
             }
 
             var tip = url.match(/[^\/]*$/)[0] || '';
@@ -398,24 +398,24 @@ var MediaSniffer = {
                 contentType: contentType,
                 contentLength: contentLength,
                 originalURL: url,
-                parsed: extras["flashgot::parsed"],
-                seek_pos: extras["flashgot::seek_pos"],
-                sort_key: extras["flashgot::sort_key"],
-                Youtube: extras["flashgot::Youtube"],
-                yt_dash: extras["flashgot::yt_dash"],
-                video_id: extras["flashgot::video_id"],
-                title: extras["flashgot::parsed"] ? extras.title.replace(/^\s+|\s+$/g, "") || ("Video " + extras["flashgot::video_id"]): "",
-                video_link: extras["flashgot::video_link"]
+                parsed: extras["grabit::parsed"],
+                seek_pos: extras["grabit::seek_pos"],
+                sort_key: extras["grabit::sort_key"],
+                Youtube: extras["grabit::Youtube"],
+                yt_dash: extras["grabit::yt_dash"],
+                video_id: extras["grabit::video_id"],
+                title: extras["grabit::parsed"] ? extras.title.replace(/^\s+|\s+$/g, "") || ("Video " + extras["grabit::video_id"]): "",
+                video_link: extras["grabit::video_link"]
               }));
               fg.interceptor.extractPostData(channel, entry); // adds entry.postData if needed
               // YouTube fallback host.
-              if (extras["flashgot::parsed"] && extras.fallback_host) {
+              if (extras["grabit::parsed"] && extras.fallback_host) {
                 var fb_url = url.replace(/^(.+?)\/\/(?:.+?)\//, "$1//" + extras.fallback_host + "/");
                 if (fb_url !== url) {
                   entry.fallback_href = fb_url;
                 }
               } // YouTube fallback host.
-              if (!extras["flashgot::parsed"]) { this._set_current_url(win, url); }
+              if (!extras["grabit::parsed"]) { this._set_current_url(win, url); }
 
               if (cacheable && (channel instanceof CI.nsICachingChannel))
                 entry.cacheKey = channel.cacheKey;
@@ -424,7 +424,7 @@ var MediaSniffer = {
             }
             this.updateUI(win);
           }
-          if (!extras["flashgot::parsed"]) { this._set_current_url(win, url); }
+          if (!extras["grabit::parsed"]) { this._set_current_url(win, url); }
         }
       } catch (e) {
         fg.log("MediaSniffer::observe: exception: [" + typeof(e) + "]: " + (e.message || e) + "\n" + (e.stack || new Error().stack));
@@ -443,7 +443,7 @@ var MediaSniffer = {
   },
   updateUI: function (win) {
     var bw = DOM.mostRecentBrowserWindow;
-    if (bw && bw.gFlashGot && bw.content == win.top) bw.gFlashGot.updateMediaUI();
+    if (bw && bw.gGrabit && bw.content == win.top) bw.gGrabit.updateMediaUI();
   },
 
   get _channelFlags() {
@@ -498,12 +498,12 @@ var MediaSniffer = {
   onSecurityChange: function () {},
   onProgressChange: function () {},
 
-  YOUTUBE_REFRESH_SIGNATURE_FUNC_URL: "flashgot::Youtube::refresh_signature_func",
+  YOUTUBE_REFRESH_SIGNATURE_FUNC_URL: "grabit::Youtube::refresh_signature_func",
   // @param w
   //   a YouTube window - either a top-level window if we're on YouTube.com,
   //   or an embed iframe if we're on a forum/blog or something.
   checkYoutube: function(yt_win, url, force) {
-    if (!gFlashGotService.getPref("media.YouTube.autodetect", true)) { return false; }
+    if (!gGrabitService.getPref("media.YouTube.autodetect", true)) { return false; }
     var id = Youtube.parseVideoId(url || yt_win.location.href);
     if (!id) return false;
 
@@ -520,7 +520,7 @@ var MediaSniffer = {
         s.title = title;
         s.type = s.type.split(";")[0] || "Media";
         s.window = yt_win;
-        s["flashgot::parsed"] = true;
+        s["grabit::parsed"] = true;
         MediaSniffer.peek(s.url, s);
       });
     }, fg.isPrivate(w));
@@ -533,7 +533,7 @@ var MediaSniffer = {
       var ch = xhr.channel;
       if (!(ch instanceof CI.nsIHttpChannel && ch instanceof CI.nsIWritablePropertyBag)) return false;
       if (!extras.wrappedJSObject) extras.wrappedJSObject = extras;
-      ch.setProperty("flashgot.media.extras", extras);
+      ch.setProperty("grabit.media.extras", extras);
       if (extras.window && fg.isPrivate(extras.window)) {
         fg.privatize(ch);
       }
@@ -553,9 +553,9 @@ var MediaSniffer = {
           newChannel.notificationCallbacks = this;
           try {
             newChannel.QueryInterface(Components.interfaces.nsIWritablePropertyBag)
-              .setProperty("flashgot.media.extras", extras);
+              .setProperty("grabit.media.extras", extras);
           } catch (x) {
-            fg.log("MediaSniffer::peek: " + (extras["flashgot::video_id"] ? "video " + extras["flashgot::video_id"] + ": " : "") + "failed to preserve extras: " + (x.message || x) + "\n" + x.stack);
+            fg.log("MediaSniffer::peek: " + (extras["grabit::video_id"] ? "video " + extras["grabit::video_id"] + ": " : "") + "failed to preserve extras: " + (x.message || x) + "\n" + x.stack);
           }
           if (callback != null && "onRedirectVerifyCallback" in callback) {
             callback.onRedirectVerifyCallback(Components.results.NS_OK);

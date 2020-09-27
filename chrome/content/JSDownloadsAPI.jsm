@@ -35,12 +35,12 @@ var JSDownloadsAPI = isRequired() && {
     let saver = null;
     let postData = l.postData || links.postData;
     if (postData || l.extraHeaders || l.cacheKey) {
-      Cu.import("chrome://flashgot/content/JSDownloadsExtras.jsm");
-      src = new FlashgotDownloadSource(src);
+      Cu.import("chrome://grabit/content/JSDownloadsExtras.jsm");
+      src = new GrabitDownloadSource(src);
       if (postData) src.post = { data: postData, contentType: l.postContentType };
       src.headers = l.extraHeaders || null;
       src.cacheKey = l.cacheKey || null;
-      saver = new FlashgotDownloadCopySaver();
+      saver = new GrabitDownloadCopySaver();
     }
     l = null; // needed to free DOM properties and cacheKey
     try {

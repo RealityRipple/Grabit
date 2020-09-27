@@ -35,11 +35,11 @@ var RedirectContext = function(links, opType, dm, onfinish) {
 };
 
 RedirectContext.prototype = {
-  prefs: CC["@mozilla.org/preferences-service;1"].getService(CI.nsIPrefService).getBranch("flashgot.redir."),
+  prefs: CC["@mozilla.org/preferences-service;1"].getService(CI.nsIPrefService).getBranch("grabit.redir."),
   
   print: Components.utils && Components.utils.reportError || dump,
   log: function(msg) {
-    this.print("[FlashGot Redirect Processor] " + msg);
+    this.print("[Grabit Redirect Processor] " + msg);
   },
   process: function(links) {
     if(!links) links = this.links;
@@ -662,7 +662,7 @@ RedirectContext.prototype = {
               context.links.rapidshareRetry = 
                 prompt.confirmEx(
                   DOM.mostRecentBrowserWindow,
-                  "FlashGot - Rapidshare",
+                  "Grabit - Rapidshare",
                   fg.getString("rapidshareRetry.confirm", [secs]),
                   prompt.STD_YES_NO_BUTTONS,
                   null,
@@ -860,7 +860,7 @@ RedirectContext.prototype = {
     
       function checkCaptcha(html) {
         if (/<input[^>]*code/.test(html)) { // captcha page
-          var docURL = l.href + "#FlashGot_Form";
+          var docURL = l.href + "#Grabit_Form";
           var ee, j, f;
           var renew = null;
           if(docURL == doc.URL) {
@@ -945,7 +945,7 @@ RedirectContext.prototype = {
             args.push(nl); 
           }
           Array.prototype.splice.apply(context.links, args); // replace parent link with children
-          if(/#FlashGot_Form$/.test(doc.URL))
+          if(/#Grabit_Form$/.test(doc.URL))
           {
             // close iframe
             var ee = doc.defaultView.parent.document.getElementsByTagName("iframe");
@@ -1105,7 +1105,7 @@ RedirectContext.prototype = {
     },
     
     function generic(l, context) {
-      if (l.contentType || l.noRedir) return; // avoid jamming FlashGot Media or already redirected URLs
+      if (l.contentType || l.noRedir) return; // avoid jamming Grabit Media or already redirected URLs
       
       if (typeof(context.genericRx) !== "object") {
         try {

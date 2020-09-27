@@ -98,7 +98,7 @@ var Youtube = {
 
   process: function (w, id, callback, isPrivate) {
     // Reentrance guard for do_xhr.
-    w["flashgot::Youtube::process::call_cnt"] = (w["flashgot::Youtube::process::call_cnt"] || 0) + 1;
+    w["grabit::Youtube::process::call_cnt"] = (w["grabit::Youtube::process::call_cnt"] || 0) + 1;
 
     if (id.type === Youtube.VIDEO_ID_TYPE_GOOGLE) {
       // Just like with YouTube, in some cases all the stream
@@ -122,19 +122,19 @@ var Youtube = {
     // Or it's not a backdoor and the response contains some kind of
     // an "age-restricted" flag that the client must check?
     // You also can bypass it with /v/VIDEO_ID and /embed/VIDEO_ID.
-    if (w["flashgot::Youtube::process::tid"]) {
-      w.clearTimeout(w["flashgot::Youtube::process::tid"]);
-      delete w["flashgot::Youtube::process::tid"];
+    if (w["grabit::Youtube::process::tid"]) {
+      w.clearTimeout(w["grabit::Youtube::process::tid"]);
+      delete w["grabit::Youtube::process::tid"];
     }
 
     function wait_for_player() {
-      delete w["flashgot::Youtube::process::tid"];
+      delete w["grabit::Youtube::process::tid"];
 
       var now = Date.now();
-      if (!arguments.callee["flashgot::start_time"]) {
-        arguments.callee["flashgot::start_time"] = now;
+      if (!arguments.callee["grabit::start_time"]) {
+        arguments.callee["grabit::start_time"] = now;
       }
-      if (now - arguments.callee["flashgot::start_time"] > 5000) {
+      if (now - arguments.callee["grabit::start_time"] > 5000) {
         Youtube.do_xhr(w, id, callback, isPrivate);
         return;
       }
@@ -146,8 +146,8 @@ var Youtube = {
       }
       // <embed/> flashvars
       if (!data && (o = w.document)) {
-        var ids = gFlashGotService.getPref("media.YouTube.flashvars_element_id", "movie_player").split(/\s*,\s*/).map(unescape);
-        var attrs = gFlashGotService.getPref("media.YouTube.flashvars_element_attr", "flashvars").split(/\s*,\s*/).map(unescape);
+        var ids = gGrabitService.getPref("media.YouTube.flashvars_element_id", "movie_player").split(/\s*,\s*/).map(unescape);
+        var attrs = gGrabitService.getPref("media.YouTube.flashvars_element_attr", "flashvars").split(/\s*,\s*/).map(unescape);
         ids.some(function(id){
           if ( ! id.length) { return; }
           var elm = o.getElementById(id);
@@ -165,21 +165,21 @@ var Youtube = {
           Youtube.do_xhr(w, id, callback, isPrivate);
         }
         else {
-          w["flashgot::Youtube::process::tid"] = w.setTimeout(arguments.callee, 200);
+          w["grabit::Youtube::process::tid"] = w.setTimeout(arguments.callee, 200);
         }
         return;
       }
       if (Youtube.process_video_info(data, callback, isPrivate)) {
-        delete w["flashgot::Youtube::process::call_cnt"];
+        delete w["grabit::Youtube::process::call_cnt"];
         return;
       }
       Youtube.do_xhr(w, id, callback, isPrivate);
     } // wait_for_player()
-    w["flashgot::Youtube::process::tid"] = w.setTimeout(wait_for_player, 0);
+    w["grabit::Youtube::process::tid"] = w.setTimeout(wait_for_player, 0);
   },
 
   do_xhr: function (w, id, callback, isPrivate) {
-    var call_cnt = w["flashgot::Youtube::process::call_cnt"];
+    var call_cnt = w["grabit::Youtube::process::call_cnt"];
 
     var url = id.type === this.VIDEO_ID_TYPE_YOUTUBE
       ? w.location.protocol + "//www.youtube.com/get_video_info?hl=en_US&el=detailpage&video_id="
@@ -191,12 +191,12 @@ var Youtube = {
       fg.privatize(xhr.channel);
     }
     xhr.addEventListener("readystatechange", function (ev) {
-      if (w["flashgot::Youtube::process::call_cnt"] !== call_cnt) {
+      if (w["grabit::Youtube::process::call_cnt"] !== call_cnt) {
         this.abort();
         return;
       };
       if (xhr.readyState !== 4) return;
-      delete w["flashgot::Youtube::process::call_cnt"];
+      delete w["grabit::Youtube::process::call_cnt"];
       Youtube.process_video_info(Youtube.parse(xhr.responseText || ""), callback, isPrivate);
     }, false);
     xhr.send(null);
@@ -225,7 +225,7 @@ var Youtube = {
         var b = o.itag && o.type && o.url
           && (o.quality = o.size || /*audio*/(Math.round(o.bitrate / 1024) + "k"));
         if (b) {
-          o["flashgot::yt_dash"] = o.size ? "video" : "audio";
+          o["grabit::yt_dash"] = o.size ? "video" : "audio";
           streams.push(o);
         }
       });
@@ -317,12 +317,12 @@ var Youtube = {
 
       // For grouping by video in the media menu.
       // YouTube.
-      if ((s["flashgot::video_id"] = data.video_id)) {
-        s["flashgot::video_link"] = "https://www.youtube.com/watch?v=" + encodeURIComponent(s["flashgot::video_id"]);
+      if ((s["grabit::video_id"] = data.video_id)) {
+        s["grabit::video_link"] = "https://www.youtube.com/watch?v=" + encodeURIComponent(s["grabit::video_id"]);
       }
       // Google Drive/Videos.
-      else if ((s["flashgot::video_id"] = data.docid)) {
-        s["flashgot::video_link"] = "https://docs.google.com/file/d/" + encodeURIComponent(s["flashgot::video_id"]);
+      else if ((s["grabit::video_id"] = data.docid)) {
+        s["grabit::video_link"] = "https://docs.google.com/file/d/" + encodeURIComponent(s["grabit::video_id"]);
       }
 
 
@@ -336,7 +336,7 @@ var Youtube = {
       if (Youtube._map_itag(Youtube.STREAM_TYPE_MAP, s.itag, null) == null) {
         is_known_itag = false;
         fg.log("Unknown itag type: " + s.itag + ": type: '" + s.type + "'");
-        s["flashgot::remap_type_hint"] = s.type.replace(/^video\/(?:x-)?/, "").replace(/3gpp$/, "3gp");
+        s["grabit::remap_type_hint"] = s.type.replace(/^video\/(?:x-)?/, "").replace(/3gpp$/, "3gp");
       }
 
       const SK_MEDIA_TYPE_VIDEO = 0; // "Normal" non-DASH video (has both audio and video tracks).
@@ -344,14 +344,14 @@ var Youtube = {
       const SK_MEDIA_TYPE_DASH_AUDIO = 2; // DASH audio.
       let sort_key = {"media": SK_MEDIA_TYPE_VIDEO, "quality": 0, "3d": 0, "container": 0};
 
-      if (s["flashgot::yt_dash"] === "video") {
+      if (s["grabit::yt_dash"] === "video") {
         sort_key["media"] = SK_MEDIA_TYPE_DASH_VIDEO;
-      } else if (s["flashgot::yt_dash"] === "audio") {
+      } else if (s["grabit::yt_dash"] === "audio") {
         sort_key["media"] = SK_MEDIA_TYPE_DASH_AUDIO;
       }
 
       // Stream quality for sorting: height for video, bitrate for audio.
-      let q = s["flashgot::yt_dash"] !== "audio"
+      let q = s["grabit::yt_dash"] !== "audio"
         ? Youtube._map_itag(Youtube.STREAM_QUALITY_SORT_MAP, s.itag, 0)
         : Math.round(parseInt(s.quality) / audio_quality_granularity) * audio_quality_granularity;
       if ( ! q) {
@@ -375,7 +375,7 @@ var Youtube = {
       // e.g. /watch?v=6pxRHBw-k8M - 1280x676 goes as "hd720" in
       // url_encoded_fmt_stream_map, as "1280x720" in fmt_list,
       // and as "1280x676" in adaptive_fmts and the DASH manifest.
-      if (q && s["flashgot::yt_dash"] !== "audio") {
+      if (q && s["grabit::yt_dash"] !== "audio") {
         // XXX: Make the list customizable via a user pref?
         let STD_RES = [144, 240, 360, 480, 520, 720, 1080, 1440,
           // http://en.wikipedia.org/wiki/High-definition_video
@@ -399,7 +399,7 @@ var Youtube = {
       // i.e. "1920x1080" -> "hd1080", "1280x720" -> "hd720", "640x360" -> "medium", etc.
       // Do this for both DASH and normal (non-DASH) video streams - see the "itag 59"
       // comment above.
-      if (q && s["flashgot::yt_dash"] !== "audio") {
+      if (q && s["grabit::yt_dash"] !== "audio") {
         switch (q) {
           case 520:
           case 480:
@@ -415,14 +415,14 @@ var Youtube = {
       }
 
       if ( ! is_known_itag) {
-        s["flashgot::map_quality_sort_key"] = q;
+        s["grabit::map_quality_sort_key"] = q;
         Youtube.update_itag_map(s);
       }
 
       if (remap_type) { s.type = Youtube.remap_stream_type(s); }
 
       // "XXXp" for video (e.g. "720p"), "XXXk" for audio (e.g. "125k").
-      if (remap_quality) { s.quality = q + (s["flashgot::yt_dash"] !== "audio" ? "p" : "k"); }
+      if (remap_quality) { s.quality = q + (s["grabit::yt_dash"] !== "audio" ? "p" : "k"); }
       // Mark 3D videos.
       // http://en.wikipedia.org/wiki/YouTube#Quality_and_codecs
       if ((s.itag >= 82 && s.itag <= 85) || (s.itag >= 100 && s.itag <= 102)) {
@@ -446,7 +446,7 @@ var Youtube = {
       // "Inverse" the quality so that it's sorted in descending order.
       sort_key["quality"] = 0xffff - sort_key["quality"];
       sort_key["container"] = type_sort_order.indexOf(s.type) & 0x0f;
-      s["flashgot::sort_key"] = (sort_key["media"] << 24)
+      s["grabit::sort_key"] = (sort_key["media"] << 24)
         | (sort_key["quality"] << 8)
         | (sort_key["3d"] << 4)
         | sort_key["container"];
@@ -528,7 +528,7 @@ var Youtube = {
           url: url,
           type: type,
           quality: quality,
-          "flashgot::yt_dash": is_audio ? "audio" : "video"
+          "grabit::yt_dash": is_audio ? "audio" : "video"
         };
         streams.push(s);
       });
@@ -566,12 +566,12 @@ var Youtube = {
   update_itag_map: function(stream) {
     var a_t = this.update_itag_map_branch("media.YouTube.itag_map.type.", stream.itag, stream.type);
     // Try to find and update the corresponding remapping branch.
-    var r_t = this.update_itag_remap_branch("media.YouTube.itag_remap.type.", stream.itag, a_t, stream["flashgot::remap_type_hint"]);
+    var r_t = this.update_itag_remap_branch("media.YouTube.itag_remap.type.", stream.itag, a_t, stream["grabit::remap_type_hint"]);
     if (r_t) { fg.log("Unknown itag remap: " + stream.itag + ": type: '" + stream.type + "' -> '" + r_t + "'"); }
     // Don't care about quality information for audio streams.
-    if (stream["flashgot::yt_dash"] === "audio") { return; }
-    if (stream["flashgot::map_quality_sort_key"]) {
-      this.update_itag_map_branch("media.YouTube.itag_map.quality_sort_key.", stream.itag, stream["flashgot::map_quality_sort_key"]);
+    if (stream["grabit::yt_dash"] === "audio") { return; }
+    if (stream["grabit::map_quality_sort_key"]) {
+      this.update_itag_map_branch("media.YouTube.itag_map.quality_sort_key.", stream.itag, stream["grabit::map_quality_sort_key"]);
     }
   },
 
@@ -583,7 +583,7 @@ var Youtube = {
       if ( ! value.length) { return null; }
       var pref = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefService)
-        .getBranch("flashgot." + branch);
+        .getBranch("grabit." + branch);
       var a = pref.getChildList("");
       for (var i = 0, len = a.length; i !== len; ++i) {
         var c = a[i];
@@ -617,7 +617,7 @@ var Youtube = {
     try {
       var pref = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefService)
-        .getBranch("flashgot." + branch);
+        .getBranch("grabit." + branch);
 
       if (remap_hint) {
         var name_branch_name = remap_hint.replace(/\./g, "_");
@@ -716,15 +716,15 @@ var Youtube = {
     // They started to encode the "id" parameter, so you can get
     // different values for the same streams from different embed
     // iframes for the same video.
-    var id1 = /[?&]id=([^&]+)/.test(url1) ? RegExp.$1 : "flashgot-id-1";
-    var id2 = /[?&]id=([^&]+)/.test(url2) ? RegExp.$1 : "flashgot-id-2";
+    var id1 = /[?&]id=([^&]+)/.test(url1) ? RegExp.$1 : "grabit-id-1";
+    var id2 = /[?&]id=([^&]+)/.test(url2) ? RegExp.$1 : "grabit-id-2";
     if (id1 !== id2) { return false; }
 
     // The only thing that allows us to identify a stream is the |itag|
     // parameter, which is a combination of the container type (MP4,
     // FLV, etc.) and the quality (1080p, 1080p 3D, 720p, etc.).
-    var itag1 = /[?&]itag=([^&]+)/.test(url1) ? RegExp.$1 : "flashgot-itag-1";
-    var itag2 = /[?&]itag=([^&]+)/.test(url2) ? RegExp.$1 : "flashgot-itag-2";
+    var itag1 = /[?&]itag=([^&]+)/.test(url1) ? RegExp.$1 : "grabit-itag-1";
+    var itag2 = /[?&]itag=([^&]+)/.test(url2) ? RegExp.$1 : "grabit-itag-2";
     if (itag1 !== itag2) { return false; }
 
     // Different seek positions are considered different streams (in case
@@ -787,7 +787,7 @@ var Youtube = {
     try {
       var pref = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefService)
-        .getBranch("flashgot." + branch);
+        .getBranch("grabit." + branch);
       pref.addObserver("", new ItagMapObserver(pref, map), false);
       var a = pref.getChildList("");
       for (var i = 0, len = a.length; i !== len; ++i) {
@@ -816,7 +816,7 @@ var Youtube = {
     try {
       var pref = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefService)
-        .getBranch("flashgot." + branch);
+        .getBranch("grabit." + branch);
       pref.addObserver("", new SortOrderObserver(pref, list), false);
 
       var a = this.parsePrefStringList(fg.getPref(branch, ""));
@@ -909,7 +909,7 @@ void function(){
   try {
     var pref = Components.classes["@mozilla.org/preferences-service;1"]
       .getService(Components.interfaces.nsIPrefService)
-      .getBranch("flashgot.media.YouTube.");
+      .getBranch("grabit.media.YouTube.");
     pref.deleteBranch("itag_map.quality.");
     pref.deleteBranch("itag_remap.quality.");
     pref.deleteBranch("quality_sort_order");

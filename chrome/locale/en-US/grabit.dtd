@@ -1,0 +1,105 @@
+<!ENTITY grabitLink "Grabit Link">
+<!ENTITY grabitLink.accesskey "R">
+<!ENTITY grabitSel "Grabit Selection">
+<!ENTITY grabitSel.accesskey "G">
+<!ENTITY grabitAll "Grabit All">
+<!ENTITY grabitAll.accesskey "A">
+<!ENTITY grabitTabs "Grabit Tabs">
+<!ENTITY grabitTabs.accesskey "B">
+<!ENTITY grabitOptions "Grabit Options">
+<!ENTITY includeImages.label "Include images found in current page">
+<!ENTITY hideDisabledCmds.label "Hide Disabled Commands">
+<!ENTITY grabitBuildGallery "Build Gallery…">
+<!ENTITY grabitBuildGallery.title "Grabit - Build Gallery">
+<!ENTITY grabitGBVariableURLs "Variable URLs">
+<!ENTITY grabitGBSample "Variable ranges are expressed in the form [start-end;step] or [function_name(…)], for instance:">
+<!ENTITY grabitGBPreview "Preview:">
+<!ENTITY grabitGBContent "Content:">
+<!ENTITY grabitGBReferrer "Referrer URL:">
+<!ENTITY grabitGBSync "Synchronize ranges">
+<!ENTITY grabitGBRanges "Ranges">
+<!ENTITY grabitGBExpressions "JavaScript Functions">
+<!ENTITY grabitGeneral "General">
+<!ENTITY grabitMenu "Menu">
+<!ENTITY grabitDownloadManager "Download Manager">
+<!ENTITY grabitMoreOpts "More Options…">
+<!ENTITY grabitExtensions "File Extensions (e.g. jpg, mpg, mp3…)">
+<!ENTITY grabitAdd "Add">
+<!ENTITY grabitRemove "Remove">
+<!ENTITY grabitPrivacy "Privacy">
+<!ENTITY grabitReferrer "Referrer">
+<!ENTITY grabitAutodetectReferrer "Send autodetected Referrer URL">
+<!ENTITY grabitFakeReferrer "Use always this Referrer URL:">
+<!ENTITY grabitSendCookies "Send Cookies">
+<!ENTITY grabitAdvanced "Advanced">
+<!ENTITY grabitBGProcessing "Process links in background">
+<!ENTITY grabitShowLog "Show Log…">
+<!ENTITY grabitClearLog "Clear Log">
+<!ENTITY grabitDMQuiet "Skip Confirmation Prompts">
+<!ENTITY grabitGetRightQuick "Use togetright.exe whenever it is possible">
+<!ENTITY grabitAutostart "Autostart downloads">
+<!ENTITY grabitNoDMS "??? NO DOWNLOAD MANAGER DETECTED ???">
+<!ENTITY grabitNoDMS.tip "Show supported Download Managers">
+<!ENTITY grabitGetRightOld "OLD GetRight ( &lt;= 5.2b )">
+<!ENTITY grabitEncodeURLs "Send encoded URLs">
+<!ENTITY grabitEnable "Enable">
+<!ENTITY grabitDisable "Disable">
+<!ENTITY grabitTmpDir "Temporary Directory">
+<!ENTITY grabitBrowse "Browse…">
+<!ENTITY grabitBrowse.accesskey "B">
+<!ENTITY grabitReset "Reset">
+<!ENTITY grabitRebootChange "This change will take effect on next browser startup">
+<!ENTITY grabitAltClick "Alt+Click = Grabit">
+<!ENTITY grabitBypassCombo "Alt+Shift+Click = NO Grabit">
+<!ENTITY grabitGesture "[Middle Button Drag Down] gesture starts Grabit downloads">
+<!ENTITY grabitDownloads "Downloads">
+<!ENTITY grabitInterceptAll "Intercept all downloads">
+<!ENTITY grabitLog "Log">
+<!ENTITY grabitShowFilter "Show Filter Dialog">
+<!ENTITY grabitHost "Host">
+<!ENTITY grabitRegExp "Regular Expression">
+<!ENTITY grabitGlob "Glob Pattern">
+<!ENTITY grabitSelAll "Select All">
+<!ENTITY grabitSelAll.accesskey "A">
+<!ENTITY grabitSelInv "Invert Selection">
+<!ENTITY grabitSelInv.accesskey "I">
+<!ENTITY grabitSelect "Select">
+<!ENTITY grabitUnselect "Deselect">
+<!ENTITY hideIcons "Hide Icons">
+<!ENTITY nestedMenu "Compact context menu (use submenu if needed)">
+<!ENTITY grabitExecutable "Executable path:">
+<!ENTITY grabitArguments "Command line arguments template:">
+<!ENTITY grabitAutodetect "Automatic download manager detection">
+<!ENTITY grabitDetect "Detect Now">
+<!ENTITY grabitPlaceHolders "Placeholders">
+<!ENTITY grabitQuoteWarn1 "You cannot use quotes within the arguments template.">
+<!ENTITY grabitQuoteWarn2 "If you need them, consider writing a batch script.">
+<!ENTITY grabitBadInstall "A core Grabit component is missing or corrupted. Please reinstall Grabit.">
+<!ENTITY grabitWellGetPath "WellGet path:">
+<!ENTITY grabitExtFilter "Apply file extension filter to batch downloads too">
+<!ENTITY grabitHTTPAuth "HTTP Authentication">
+<!ENTITY grabitAppearance "Appearance">
+<!ENTITY grabitDownloadDropdown "Show Grabit drop-down inside the default download dialog">
+<!ENTITY grabitShownInContextMenu "Shown in context menu">
+<!ENTITY grabitCustomEntries "Custom Entries">
+<!ENTITY grabitDigGallery "Dig Gallery">
+<!ENTITY grabitOverwrite "Overwrite">
+<!ENTITY grabitMedia "Grabit Media">
+<!ENTITY grabitShowReleaseNotes "Display the release notes on update">
+<!ENTITY grabitUninstall "Uninstall">
+<!ENTITY grabitClear.label "Clear">
+<!ENTITY grabitClear.accesskey "C">
+<!ENTITY grabitURL "Address">
+<!ENTITY grabitFileName "Name">
+<!ENTITY grabitFileType "Type">
+<!ENTITY grabitDestinationFolder "Destination folder">
+<!ENTITY grabitDestinationFolder.accesskey "D">
+<!ENTITY grabitFilter "Selection filter">
+<!ENTITY grabitFilter.accesskey "F">
+<!ENTITY grabitAllChoosen "Choose all the items by default">
+<!ENTITY grabitAllChoosen.accesskey "C">
+<!ENTITY grabitShowToolbarButton "Show toolbar button">
+<!ENTITY grabit.media.formats "Available formats">
+<!ENTITY grabit.media.refresh_signature_func.label "Refresh signature">
+<!ENTITY grabit.media.refresh_signature_func.tooltiptext "Try to refresh the signature decoding function">
+<!ENTITY grabit.media.formats.dash "DASH (separate audio and video tracks)">

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+
+    FlashGot - a Firefox extension for external download managers integration
+    Copyright (C) 2004-2013 Giorgio Maone - g.maone@informaction.com
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://grabit/skin/browser.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://grabit/locale/grabit.dtd">
+
+<overlay id="grabitOverlay" 
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+		<script type="application/x-javascript" src="grabitCommon.js"/>
+		<script type="application/x-javascript" src="grabitOverlay.js"/>
+  
+  <keyset id="mainKeyset">
+    <key id="grabit-link-key" keycode="VK_F1" modifiers="accel" oncommand="gGrabit.downloadLink()" />
+    <key id="grabit-sel-key" keycode="VK_F2" modifiers="accel" oncommand="gGrabit.downloadSel()"/>
+    <key id="grabit-all-key" keycode="VK_F3" modifiers="accel" oncommand="gGrabit.downloadAll()"/>
+    <key id="grabit-tabs-key" keycode="VK_F3" modifiers="shift accel" oncommand="gGrabit.downloadTabs()"/>
+    <key id="grabit-media-key" keycode="VK_F7" modifiers="accel" oncommand="gGrabit.downloadMedia()"/>
+  </keyset>
+  
+  <menupopup id="menu_ToolsPopup">
+    <menu id="grabit-menu"
+      insertbefore="prefSep"
+      />
+   </menupopup>
+	
+	
+  <menu id="grabit-menu" label="Grabit" 
+    class="menu-iconic grabit-icon-lnk"
+   >
+  <menupopup id="grabit-menu-popup" 
+    onpopupshowing="gGrabit.prepareToolsMenu(event)"
+    >
+        <menuitem id="grabit-main-menuitem-sel"
+        label="&grabitSel;"  
+        accesskey="&grabitSel.accesskey;"
+        oncommand="gGrabit.delayCmd('Sel')"
+        key="grabit-sel-key"
+        class="menuitem-iconic grabit-icon-sel"
+        disabled="true"
+    />
+    <menuitem id="grabit-main-menuitem-all"
+        label="&grabitAll;" 
+        accesskey="&grabitAll.accesskey;"
+        oncommand="gGrabit.delayCmd('All')"
+        key="grabit-all-key"
+        class="menuitem-iconic grabit-icon-all"
+        disabled="true"
+        />
+    <menuitem id="grabit-main-menuitem-tabs"
+        label="&grabitTabs;" 
+        accesskey="&grabitTabs.accesskey;"
+        oncommand="gGrabit.delayCmd('Tabs')"
+        key="grabit-tabs-key"
+        class="menuitem-iconic grabit-icon-tabs"
+        disabled="true"
+        />
+    <menuitem id="grabit-main-menuitem-media"
+        label="&grabitMedia;" 
+        oncommand="gGrabit.downloadMedia()"
+        key="grabit-media-key"
+        class="menuitem-iconic grabit-icon-media"
+        disabled="true"
+        />
+    <menuitem id="grabit-main-menuitem-buildGallery"
+      label="&grabitBuildGallery;"
+      class="menuitem-iconic grabit-icon-buildGallery" 
+      oncommand="gGrabit.buildGallery()"
+      disabled="true"
+    />
+    <menuseparator id="grabit-main-sep-buildGallery"  />
+       <menuitem id="grabit-main-menuitem-opt-autoStart"
+        label="&grabitAutostart;"
+        type="checkbox"
+        oncommand="gGrabit.switchOption('autoStart')"
+      />
+      <menuitem id="grabit-main-menuitem-opt-includeImages"
+        label="&includeImages.label;"
+        type="checkbox"
+        oncommand="gGrabit.switchOption('includeImages')"
+      />
+      <menuitem id="grabit-main-menuitem-opts"
+        label="&grabitMoreOpts;"
+        oncommand="gGrabit.openOptionsDialog()"
+        class="menuitem-iconic grabit-icon-opts"
+				onpopupshowing="gGrabit.prepareOptsMenu(event.target)"
+      />
+  </menupopup>
+  </menu>
+
+
+  <toolbarpalette id="BrowserToolbarPalette">
+		
+     <toolbarbutton id="grabit-media-tbb"
+      class="toolbarbutton-1"
+      hidden="true"
+      label="Grab Media"
+      oncommand="gGrabit.downloadMedia()"
+      context="grabit-media-popup"
+      mousethrough="never"
+    >
+    
+   </toolbarbutton>
+		
+		
+    <toolbarbutton id="grabit-tbb-all" 
+      oncommand="event.target != this || window.setTimeout(function() { gGrabit.downloadSel() || gGrabit.downloadAll(); },0);"
+      tooltiptext="&grabitSel; | &grabitAll;" 
+      class="toolbarbutton-1"
+      label="Grabit"
+      type="menu-button"
+   >
+    <menupopup id="grabit-tbb-menupopup-options" onpopupshowing="gGrabit.prepareOptsMenu(event.target)">
+        <menuitem id="grabit-tbb-menuitem-nodms" hidden="true"
+          label="&grabitNoDMS;"
+          oncommand="gGrabitService.showDMSReference()"
+          />
+        <menuseparator />
+         <menuitem id="grabit-tbb-menuitem-opt-autoStart"
+          label="&grabitAutostart;"
+          type="checkbox"
+          oncommand="gGrabit.switchOption('autoStart')"
+          />
+        <menuitem id="grabit-tbb-menuitem-opt-includeImages"
+          label="&includeImages.label;"
+          type="checkbox"
+          oncommand="gGrabit.switchOption('includeImages')"
+          />
+        <menuitem id="grabit-tbb-menuitem-opts" 
+          label="&grabitMoreOpts;"
+          oncommand="gGrabit.openOptionsDialog()"
+          class="menuitem-iconic grabit-icon-opts"  
+        />
+      </menupopup>
+   </toolbarbutton>
+  </toolbarpalette>
+
+  <popupset id="mainPopupSet">
+
+    <menupopup id="grabit-media-popup" onpopupshowing="return gGrabit.prepareMediaMenu(this, event)" onpopuphiding="gGrabit.unprepareMediaMenu(this, event);">
+      <menuitem id="grabit-media-menuitem-opts"
+                label="&grabitOptions;"
+                oncommand="gGrabit.openOptionsDialog(3)"
+                />
+      <menuitem id="grabit-media-clear"
+                label="&grabitClear.label;"
+                accesskey="&grabitClear.accesskey;"
+                oncommand="gGrabit.clearMedia()"
+                />
+      <menuseparator id="grabit-media-sep" />
+      <menu id="grabit-media-parsed-menu" label="&grabit.media.formats;">
+        <menupopup id="grabit-media-parsed-popup">
+          <menu id="grabit-media-parsed-dash-menu" label="&grabit.media.formats.dash;">
+            <menupopup id="grabit-media-parsed-dash-popup" />
+          </menu>
+          <menuitem id="grabit-media-parsed-refresh_signature_func"
+                    label="&grabit.media.refresh_signature_func.label;"
+                    tooltiptext="&grabit.media.refresh_signature_func.tooltiptext;"
+                    oncommand="gGrabit.Youtube_refresh_signature(event, this);" />
+        </menupopup>
+      </menu>
+    </menupopup>
+  </popupset>
+
+  <popup id="contentAreaContextMenu">
+    <menu id="grabit-submenu" hidden="true" persist="hidden"
+      label="Grabit" class="menu-iconic grabit-icon-lnk"
+      accesskey="&grabitLink.accesskey;"
+      insertbefore="context-sep-selectall,context-sep-stop,context-sep-copylink"
+      >
+      <menupopup>
+         <menuseparator id="grabit-submenu-anchor" hidden="true" />
+         <menuitem id="grabit-menuitem-it"
+          label="&grabitLink;" 
+          accesskey="&grabitLink.accesskey;"
+          oncommand="gGrabit.downloadPopupLink()"
+          key="grabit-link-key"
+          class="menuitem-iconic grabit-icon-lnk"
+        />
+        <menuitem id="grabit-menuitem-sel"
+          label="&grabitSel;"  
+          accesskey="&grabitSel.accesskey;"
+          oncommand="gGrabit.delayCmd('Sel')"
+          key="grabit-sel-key"
+          class="menuitem-iconic grabit-icon-sel"
+        />
+        <menuitem id="grabit-menuitem-all" 
+            label="&grabitAll;" 
+            accesskey="&grabitAll.accesskey;"
+            oncommand="gGrabit.delayCmd('All')"
+            key="grabit-all-key"
+            class="menuitem-iconic grabit-icon-all"
+          />
+        <menuitem id="grabit-menuitem-tabs"
+            label="&grabitTabs;" 
+            accesskey="&grabitTabs.accesskey;"
+            oncommand="gGrabit.delayCmd('Tabs')"
+            key="grabit-tabs-key"
+            class="menuitem-iconic grabit-icon-tabs"
+          />
+        <menuitem id="grabit-menuitem-media" 
+            label="&grabitMedia;" 
+           oncommand="gGrabit.downloadMedia()"
+            key="grabit-media-key"
+            class="menuitem-iconic grabit-icon-media"
+          />
+        
+        <menuitem id="grabit-menuitem-buildGallery"
+          label="&grabitBuildGallery;"
+          class="menuitem-iconic grabit-icon-buildGallery"  
+          oncommand="gGrabit.buildGallery()"
+        />
+        <menu id="grabit-menu-options"
+          class="menu-iconic grabit-icon-opts"  
+          label="&grabitOptions;" >
+          <menupopup id="grabit-menupopup-options" onpopupshowing="gGrabit.prepareOptsMenu(event.target)">
+            <menuitem id="grabit-ctx-menuitem-nodms" hidden="true"
+              label="&grabitNoDMS;"
+              oncommand="gGrabitService.showDMSReference()"
+              />
+            <menuseparator id="grabit-ctx-sep-nodms" />
+             <menuitem id="grabit-ctx-menuitem-opt-autoStart"
+              label="&grabitAutostart;"
+              type="checkbox"
+              oncommand="gGrabit.switchOption('autoStart')"
+              />
+            <menuitem id="grabit-ctx-menuitem-opt-includeImages"
+              label="&includeImages.label;"
+              type="checkbox"
+              oncommand="gGrabit.switchOption('includeImages')"
+              />
+            <menuitem id="grabit-ctx-menuitem-opts"
+              label="&grabitMoreOpts;"
+              oncommand="gGrabit.openOptionsDialog()"
+            />
+          </menupopup>
+        </menu>
+      </menupopup>
+    </menu>  
+    
+    <menuseparator id="grabit-context-separator" hidden="true"
+      insertbefore="context-sep-selectall,context-sep-stop,context-sep-copylink" /> 
+    <menuseparator id="grabit-context-separator2" hidden="true" 
+      insertbefore="context-sep-selectall,context-sep-stop,context-sep-copylink" />   
+  
+  </popup>
+  
+  <statusbar id="status-bar">
+    <statusbarpanel id="grabit-progresspanel" insertafter="grabit-statusbarpanel,statusbar-progresspanel,statusbar-display" 
+      class="statusbarpanel-progress" collapsed="true">
+      <label plain="true" value="Grabit" />
+      <progressmeter id="grabit-progressmeter" class="progressmeter-status" mode="normal" value="0" />
+    </statusbarpanel>
+    
+    <statusbarpanel id="grabit-media-status" insertafter="statusbar-display"
+        class="statusbarpanel-iconic grabit-icon-media"
+        hidden="true"
+        oncommand="gGrabit.downloadMedia()"
+        context="grabit-media-popup"
+        mousethrough="never"
+    />
+  </statusbar>
+  
+</overlay>

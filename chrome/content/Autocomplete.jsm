@@ -5,8 +5,8 @@ const Cu = Components.utils;
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
  
 const CLASS_ID = Components.ID('21a54730-28ce-11e2-81c1-0800200c9a66');
-const CLASS_NAME = "FlashGot Autocomplete";
-const CONTRACT_ID = '@mozilla.org/autocomplete/search;1?name=flashgot-autocomplete';
+const CLASS_NAME = "Grabit Autocomplete";
+const CONTRACT_ID = '@mozilla.org/autocomplete/search;1?name=grabit-autocomplete';
  
 /**
  * @constructor

@@ -1,6 +1,6 @@
 var EXPORTED_SYMBOLS = [
-  "FlashgotDownloadSource",
-  "FlashgotDownloadCopySaver"
+  "GrabitDownloadSource",
+  "GrabitDownloadCopySaver"
 ];
 
 const Cc = Components.classes;
@@ -51,7 +51,7 @@ function isString(aValue) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Supports POST data and custom headers support.
-// class FlashgotDownloadSource extends DownloadSource {
+// class GrabitDownloadSource extends DownloadSource {
 //   Post post;
 //   Map<string, string> headers;
 //
@@ -60,8 +60,8 @@ function isString(aValue) {
 //     string contentType;
 //   }
 // }
-// FlashgotDownloadSource(Object serializable = null);
-function FlashgotDownloadSource(o /*= null*/) {
+// GrabitDownloadSource(Object serializable = null);
+function GrabitDownloadSource(o /*= null*/) {
   if (!o) { return; }
   this.url = o.url;
   this.isPrivate = o.isPrivate;
@@ -70,7 +70,7 @@ function FlashgotDownloadSource(o /*= null*/) {
   this.headers = o.headers;
 }
 
-FlashgotDownloadSource.prototype = {
+GrabitDownloadSource.prototype = {
   __proto__: DownloadSource.prototype,
 
   post: null,
@@ -88,17 +88,17 @@ FlashgotDownloadSource.prototype = {
   }
 };
 
-FlashgotDownloadSource.fromSerializable = function(o) {
-  return new FlashgotDownloadSource(o);
+GrabitDownloadSource.fromSerializable = function(o) {
+  return new GrabitDownloadSource(o);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// class FlashgotDownloadCopySaver extends DownloadCopySaver
+// class GrabitDownloadCopySaver extends DownloadCopySaver
 // Supports POST data and custom headers support.
-function FlashgotDownloadCopySaver() {}
+function GrabitDownloadCopySaver() {}
 
-FlashgotDownloadCopySaver.prototype = {
+GrabitDownloadCopySaver.prototype = {
   __proto__: DownloadCopySaver.prototype,
 
   // @override
@@ -353,7 +353,7 @@ FlashgotDownloadCopySaver.prototype = {
         }
       }.bind(this));
     } catch(x){
-      Components.utils.reportError("FlashgotDownloadCopySaver::execute: exception: "
+      Components.utils.reportError("GrabitDownloadCopySaver::execute: exception: "
         + (x ? (x.message || x) + "\n" + (x.stack || new Error().stack): x));
     }
     return null;
@@ -361,7 +361,7 @@ FlashgotDownloadCopySaver.prototype = {
 
 
   // @override
-  toSerializable: function() this.entityID ? { type: "flashgot", entityID: this.entityID } : "flashgot"
+  toSerializable: function() this.entityID ? { type: "grabit", entityID: this.entityID } : "grabit"
   
 };
 

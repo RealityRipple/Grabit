@@ -169,14 +169,14 @@ HttpInterceptor.prototype = {
 
     channel.QueryInterface(CI.nsIChannel);
     
-    if (!(channel.loadFlags & channel.LOAD_DOCUMENT_URI)) throw new Error("FlashGot not interested in non-document loads");
+    if (!(channel.loadFlags & channel.LOAD_DOCUMENT_URI)) throw new Error("Grabit not interested in non-document loads");
     
     if (fg.DMS[fg.defaultDM].codeName === "_Built_In_") throw new Error("Using built-in, bailing out");
     
     const uri = channel.URI;
     // dump("FG: doContent " +contentType + " " + uri.spec + "\n");
     if (!this._willHandle(uri.spec, contentType)) {
-      throw new Error("FlashGot not interested in " + contentType + " from " + uri.spec);
+      throw new Error("Grabit not interested in " + contentType + " from " + uri.spec);
     }
     
     this.log("Intercepting download...");
@@ -266,7 +266,7 @@ HttpInterceptor.prototype = {
         this.lastPost = channel;
       }
       if (this.forceAutoStart) {
-        this.doContent("flashgot/forced", true, channel, null);
+        this.doContent("grabit/forced", true, channel, null);
         return;
       }
       

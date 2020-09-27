@@ -1,72 +1,9 @@
-content flashgot       chrome/content/
-locale  flashgot af-ZA chrome/locale/af-ZA/
-locale  flashgot ar    chrome/locale/ar/
-locale  flashgot ar-SA chrome/locale/ar-SA/
-locale  flashgot be-BY chrome/locale/be-BY/
-locale  flashgot bg-BG chrome/locale/bg-BG/
-locale  flashgot bn-BD chrome/locale/bn-BD/
-locale  flashgot bn-IN chrome/locale/bn-IN/
-locale  flashgot ca-AD chrome/locale/ca-AD/
-locale  flashgot cs-CZ chrome/locale/cs-CZ/
-locale  flashgot da    chrome/locale/da/
-locale  flashgot de    chrome/locale/de/
-locale  flashgot el    chrome/locale/el/
-locale  flashgot en-US chrome/locale/en-US/
-locale  flashgot es-AR chrome/locale/es-AR/
-locale  flashgot es-CL chrome/locale/es-CL/
-locale  flashgot es-ES chrome/locale/es-ES/
-locale  flashgot et-EE chrome/locale/et-EE/
-locale  flashgot eu    chrome/locale/eu/
-locale  flashgot fa-IR chrome/locale/fa-IR/
-locale  flashgot fi    chrome/locale/fi/
-locale  flashgot fr    chrome/locale/fr/
-locale  flashgot gl-ES chrome/locale/gl-ES/
-locale  flashgot he    chrome/locale/he/
-locale  flashgot he-IL chrome/locale/he-IL/
-locale  flashgot hi-IN chrome/locale/hi-IN/
-locale  flashgot hr-HR chrome/locale/hr-HR/
-locale  flashgot hu    chrome/locale/hu/
-locale  flashgot hy-AM chrome/locale/hy-AM/
-locale  flashgot id-ID chrome/locale/id-ID/
-locale  flashgot it    chrome/locale/it/
-locale  flashgot ja-JP chrome/locale/ja-JP/
-locale  flashgot ka-GE chrome/locale/ka-GE/
-locale  flashgot kk-KZ chrome/locale/kk-KZ/
-locale  flashgot km-KH chrome/locale/km-KH/
-locale  flashgot ko-KR chrome/locale/ko-KR/
-locale  flashgot lt-LT chrome/locale/lt-LT/
-locale  flashgot mk-MK chrome/locale/mk-MK/
-locale  flashgot ml-IN chrome/locale/ml-IN/
-locale  flashgot mn-MN chrome/locale/mn-MN/
-locale  flashgot ms-MY chrome/locale/ms-MY/
-locale  flashgot nb-NO chrome/locale/nb-NO/
-locale  flashgot nl    chrome/locale/nl/
-locale  flashgot pl    chrome/locale/pl/
-locale  flashgot pt-BR chrome/locale/pt-BR/
-locale  flashgot pt-PT chrome/locale/pt-PT/
-locale  flashgot ro-RO chrome/locale/ro-RO/
-locale  flashgot ru    chrome/locale/ru/
-locale  flashgot sk-SK chrome/locale/sk-SK/
-locale  flashgot sl-SI chrome/locale/sl-SI/
-locale  flashgot sq-AL chrome/locale/sq-AL/
-locale  flashgot sr    chrome/locale/sr/
-locale  flashgot sv-SE chrome/locale/sv-SE/
-locale  flashgot th    chrome/locale/th/
-locale  flashgot tr    chrome/locale/tr/
-locale  flashgot uk    chrome/locale/uk/
-locale  flashgot uk-UA chrome/locale/uk-UA/
-locale  flashgot vi    chrome/locale/vi/
-locale  flashgot zh-CN chrome/locale/zh-CN/
-locale  flashgot zh-TW chrome/locale/zh-TW/
-skin    flashgot skin  chrome/skin/
-overlay chrome://browser/content/browser.xul chrome://flashgot/content/flashgotOverlayFx.xul
-overlay chrome://songbird/content/xul/mainScriptsOverlay.xul chrome://flashgot/content/flashgotOverlayFx.xul
-overlay chrome://emusic/content/startup.xul chrome://flashgot/content/flashgotOverlayFx.xul
-overlay chrome://messenger/content/mailWindowOverlay.xul chrome://flashgot/content/flashgotOverlayTB.xul
-overlay chrome://mozapps/content/downloads/unknownContentType.xul chrome://flashgot/content/flashgotDMOverlayFx.xul
-overlay chrome://navigator/content/navigatorOverlay.xul chrome://flashgot/content/flashgotOverlayMoz.xul
-overlay chrome://global/content/nsHelperAppDlg.xul chrome://flashgot/content/flashgotDMOverlayMoz.xul
-style chrome://global/content/customizeToolbar.xul chrome://flashgot/skin/browser.css
-component {2a55fc5c-7b31-4ee1-ab15-5ee2eb428cbe} components/flashgotService.js
-contract @maone.net/flashgot-service;1 {2a55fc5c-7b31-4ee1-ab15-5ee2eb428cbe}
-category sessionstore-windows-restored @maone.net/flashgot-service;1 @maone.net/flashgot-service;1
+content grabit       chrome/content/
+locale  grabit en-US chrome/locale/en-US/
+skin    grabit skin  chrome/skin/
+overlay chrome://browser/content/browser.xul chrome://grabit/content/grabitOverlay.xul
+overlay chrome://mozapps/content/downloads/unknownContentType.xul chrome://grabit/content/grabitDMOverlay.xul
+style     chrome://global/content/customizeToolbar.xul chrome://grabit/skin/browser.css
+component {D535898B-321D-5BBE-9D43-CD525E30AED4} components/grabitService.js
+contract  @mozilla.org/grabit-service;1          {D535898B-321D-5BBE-9D43-CD525E30AED4}
+category  sessionstore-windows-restored          @mozilla.org/grabit-service;1          @mozilla.org/grabit-service;1

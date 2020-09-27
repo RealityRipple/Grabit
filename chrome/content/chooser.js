@@ -34,7 +34,7 @@ var Chooser = {
     
     this.dialog.setAttribute("title", this.params.title);
     document.getElementById("destLabel").setAttribute("value",
-      this.destFolderLabel = gFlashGotService.getString("ph.FOLDER")
+      this.destFolderLabel = gGrabitService.getString("ph.FOLDER")
     );
     
     this._initLinks(this.params.links);
@@ -52,13 +52,13 @@ var Chooser = {
   
   get separator() {
     delete this.separator;
-    return this.separator = gFlashGotService.isWindows ? ";" : ":";
+    return this.separator = gGrabitService.isWindows ? ";" : ":";
   },
   
   loadRecent: function() {
-    if (gFlashGotService.inPrivate) return;
+    if (gGrabitService.inPrivate) return;
     try {
-      Components.utils.import("chrome://flashgot/content/Autocomplete.jsm");
+      Components.utils.import("chrome://grabit/content/Autocomplete.jsm");
     } catch (e) {
       dump(e + "\n" + e.stack)
       return;
@@ -67,7 +67,7 @@ var Chooser = {
     var t = document.getElementById("dest");
 
     t.setAttribute("autocompletesearchparam",
-        gFlashGotService.getUPref("recentDirs") || "");
+        gGrabitService.getUPref("recentDirs") || "");
     
     setTimeout(function() {
       t.addEventListener("focus", function() {
@@ -108,8 +108,8 @@ var Chooser = {
     
   },
   updateRecent: function(path) {
-    if (gFlashGotService.inPrivate) return;
-    var recentString = gFlashGotService.getUPref("recentDirs");
+    if (gGrabitService.inPrivate) return;
+    var recentString = gGrabitService.getUPref("recentDirs");
     var recent;
     try {
       recent = recentString && JSON.parse(recentString) || [];
@@ -124,7 +124,7 @@ var Chooser = {
     }
     if (recent.length > 9) recent.splice(9, recent.length - 9);
     recent.unshift(path);
-    gFlashGotService.setUPref("recentDirs", JSON.stringify(recent));
+    gGrabitService.setUPref("recentDirs", JSON.stringify(recent));
   },
   
   sync: function() {
@@ -158,7 +158,7 @@ var Chooser = {
       if (d && (d.exists() || (d = d.parent).exists()) && d.isDirectory()) {
         fp.displayDirectory = d;
       }
-    } catch (ex) { gFlashGotService.log(ex); }
+    } catch (ex) { gGrabitService.log(ex); }
     
     fp.appendFilters(CI.nsIFilePicker.filterAll);
     
@@ -177,7 +177,7 @@ var Chooser = {
         try {
           d.create(CI.nsIFile.DIRECTORY_TYPE, permissions);
         } catch (e) {
-          gFlashGotService.showFileWriteError(d, e);
+          gGrabitService.showFileWriteError(d, e);
           throw e;
         }
       }
@@ -198,7 +198,7 @@ var Chooser = {
     
     var tree = document.getElementById("links");
     try {
-      Components.utils.import("chrome://flashgot/content/LinkChooser.jsm");
+      Components.utils.import("chrome://grabit/content/LinkChooser.jsm");
       this.linkChooser = new LinkChooser(tree, links,
                                          document.getElementById("filter").value,
                                          document.getElementById("all-choosen").checked
