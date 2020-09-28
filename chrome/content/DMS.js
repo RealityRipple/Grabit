@@ -117,6 +117,9 @@ GrabitDM.prototype = {
     }
     try {
       var exeFile = fg.profDir.clone();
+      exeFile.append("grabit");
+      if (!exeFile.exists())
+        exeFile.create(1, 0755);
       exeFile.append(exeName);
       this._exeFile = this.checkExePlatform(exeFile);
       if(this._exeFile) {

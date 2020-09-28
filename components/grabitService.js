@@ -939,6 +939,9 @@ fg = {
   get logFile() {
     delete this.logFile;
     var logFile = this.profDir.clone();
+    logFile.append("grabit");
+    if (!logFile.exists())
+      logFile.create(1, 0755);
     logFile.append("grabit.log");
     return this.logFile = logFile;
   },

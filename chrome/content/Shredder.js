@@ -40,6 +40,7 @@ Shredder.instance = (function() {
   return fg.isMac && Shredder.create("/usr/bin/srm", ["-fm"]) ||
     fg.isWindows && Shredder.create((function() {
       var exe = fg.profDir.clone();
+      exe.append("grabit");
       exe.append("FlashGot.exe");
       return exe;
     })(), ["-s"]) ||
