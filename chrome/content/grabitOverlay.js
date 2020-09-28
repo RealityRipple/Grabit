@@ -280,7 +280,7 @@ var gGrabit = {
     
     
     
-    if(gGrabitService && !(document.getElementById("grabit-menu").hidden = gGrabitService.getPref("hide-menu"))) {
+    if(gGrabitService && !(document.getElementById("grabit-menu").hidden = gGrabitService.getPref("hideToolsMenu"))) {
       const dis = false; // !gGrabitService.DMS.found; // can never be since we implemented built-in
       const hideIcons = this.hideIcons;
       this.updateMediaUI();
@@ -622,6 +622,8 @@ var gGrabit = {
       gGrabit.updateMediaStatus();
       return;
     }
+    if (document.getElementById("grabit-menu") !== null)
+      document.getElementById("grabit-menu").hidden = gGrabitService.getPref("hideToolsMenu");
     
     var ms = this.mediaStatusAnim.widget;
     if (ms) {

@@ -19,6 +19,7 @@ pref("grabit.hide-autotest", true);
 pref("grabit.hide-icons", false);
 pref("grabit.hide-tabs", true);
 pref("grabit.hideDisabledCmds", true);
+pref("grabit.hideToolsMenu", false);
 pref("grabit.httpauth", false);
 pref("grabit.includeImages", false);
 pref("grabit.interceptAll", false);

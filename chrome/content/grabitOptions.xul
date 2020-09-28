@@ -266,6 +266,10 @@
          
          <spacer flex="1" />
         <separator class="groove" />
+        <checkbox id="opt-hideToolsMenu" label="&hideToolsMenu.label;" />
+
+         <spacer flex="1" />
+        <separator class="groove" />
         <hbox align="center">
           <label class="header" id="tmpdir-label" value="&grabitLog;" />
           <checkbox id="invopt-logEnabled"  label="&grabitDisable;" />

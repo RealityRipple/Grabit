@@ -71,6 +71,7 @@
 <!ENTITY grabitArguments "Command line arguments template:">
 <!ENTITY grabitAutodetect "Automatic download manager detection">
 <!ENTITY grabitDetect "Detect Now">
+<!ENTITY hideToolsMenu.label "Hide Entry in Tools Menu">
 <!ENTITY grabitPlaceHolders "Placeholders">
 <!ENTITY grabitQuoteWarn1 "You cannot use quotes within the arguments template.">
 <!ENTITY grabitQuoteWarn2 "If you need them, consider writing a batch script.">
