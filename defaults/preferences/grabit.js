@@ -90,12 +90,12 @@ pref("grabit.dmsopts.Net_Transport_2.stripHash", true);
 pref("grabit.dmsopts.FlashGet.asciiFilter", true);
 pref("grabit.dmsopts.FlashGet.cookiePersistence", 24);
 
-pref("grabit.dmsopts.JDownloader.url", "http://127.0.0.1:9666/grabit");
+pref("grabit.dmsopts.JDownloader.url", "http://127.0.0.1:9666/flashgot");
 pref("grabit.dmsopts.JDownloader.delay", 8);
 pref("grabit.dmsopts.JDownloader.autostart", true);
 pref("grabit.dmsopts.JDownloader.quiet", false);
 
-pref("grabit.dmsopts.pyLoad.url", "http://127.0.0.1:9666/grabit");
+pref("grabit.dmsopts.pyLoad.url", "http://127.0.0.1:9666/flashgot");
 pref("grabit.dmsopts.pyLoad.autostart", true);
 
 pref("grabit.java", "");
