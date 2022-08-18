@@ -128,34 +128,6 @@ GrabitDMDialog.prototype = {
   
   sizeToContent: function() {
     return window.sizeToContent();
-    try {
-      window.sizeToContent();
-    } catch(e) {
-      dump(e + "\n");
-      try {
-				var btn = document.documentElement.getButton('accept');
-				window.innerHeight = btn.boxObject.y + 10; 
-			}
-			catch (e) {
-				dump(e + "\n");
-			}		
-    }
-    var boxes = document.getAnonymousNodes(document.documentElement);
-    var h = 48; // margin
-    var w = 0;
-    var bo;
-    for (var j = boxes.length; j-- > 0;) {
-      bo = boxes[j].boxObject;
-      h += bo.height;
-      w = Math.max(w, bo.width);
-    }
-    w += 48; // margin
-
-    h = Math.max(window.outerHeight, h);
-    w = Math.max(window.outerWidth, w);
-    window.resizeTo(window.outerWidth, h);
-    if (window.outerWidth < w || window.outerHeight < h) 
-      window.resizeTo(w, h);
   },
   
   init: function() {
