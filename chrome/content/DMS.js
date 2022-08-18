@@ -481,7 +481,7 @@ GrabitDM.prototype = {
     if (exists)
       return false;
 
-    var channel = IOS.newChannel("chrome://grabit/content/" + this.exeName, null, null);
+    var channel = IOS.newChannel2("chrome://grabit/content/" + this.exeName, null, null, null, null, null, null, null);
     var bis = CC['@mozilla.org/binaryinputstream;1'].createInstance(CI.nsIBinaryInputStream);
     bis.setInputStream(channel.open());
     const bytesCount = channel.contentLength;
@@ -1397,11 +1397,11 @@ GrabitDM.initDMS = function() {
       delete this._supported;
       return this._supported = (function() {
             try {
-              IOS.newChannel("chrome://dta-modules/content/support/filtermanager.js", null, null);
+              IOS.newChannel2("chrome://dta-modules/content/support/filtermanager.js", null, null, null, null, null, null, null);
               return true;
             } catch(e) {}
             try {
-              IOS.newChannel("resource://dta/support/filtermanager.jsm", null, null);
+              IOS.newChannel2("resource://dta/support/filtermanager.jsm", null, null, null, null, null, null, null);
               return true;
             } catch(e) {}
             return  "dtaIFilterManager" in CI || "@downthemall.net/privacycontrol;1" in CC;
