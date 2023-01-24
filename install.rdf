@@ -3,13 +3,13 @@
  <Description about="urn:mozilla:install-manifest">
   <em:name>Grabit</em:name>
   <em:id>{77485BDA-6FFE-5A73-B3ED-943F929C15AE}</em:id>
-  <em:version>31.0</em:version>
+  <em:version>32.0</em:version>
   <em:type>2</em:type>
   <em:targetApplication>
    <Description>
     <em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
-    <em:minVersion>29.0</em:minVersion>
-    <em:maxVersion>30.*</em:maxVersion>
+    <em:minVersion>32.0</em:minVersion>
+    <em:maxVersion>32.*</em:maxVersion>
    </Description>
   </em:targetApplication>
   <em:description>Enables Firefox, Mozilla Suite, Netscape and Thunderbird to handle single and massive (&quot;all&quot; and &quot;selection&quot;) downloads using the most popular external download managers for Windows, Mac OS X, Linux and FreeBSD (dozens currently supported, see Extension's Home Page for details). Grabit offers also a Build Gallery functionality which helps to synthetize full media galleries in one page, from serial contents originally scattered on several pages, for easy and fast &quot;download all&quot;.</em:description>
