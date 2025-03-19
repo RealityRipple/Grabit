@@ -3,7 +3,7 @@
  <Description about="urn:mozilla:install-manifest">
   <em:name>Grabit</em:name>
   <em:id>{77485BDA-6FFE-5A73-B3ED-943F929C15AE}</em:id>
-  <em:version>33.0</em:version>
+  <em:version>33.1</em:version>
   <em:type>2</em:type>
   <em:targetApplication>
    <Description>
