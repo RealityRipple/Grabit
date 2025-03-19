@@ -1062,7 +1062,7 @@ fg = {
 ,
   get prefs() {
     delete this.prefs;
-    return this.prefs = this.prefService.getBranch("grabit.").QueryInterface(CI.nsIPrefBranchInternal);
+    return this.prefs = this.prefService.getBranch("extensions.grabit.").QueryInterface(CI.nsIPrefBranchInternal);
   }
 ,
   hasDMS: false,

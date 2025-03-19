@@ -44,6 +44,7 @@ var gGrabit = {
   },
   
   init: function() {
+    gGrabit.updateConfig();
     if(!gGrabitService) throw new Error("GrabitService not registered!");
     
     gGrabitService.dom._winType = document.documentElement.getAttribute("windowtype");
@@ -517,6 +518,45 @@ var gGrabit = {
   }
 ,
 
+  updateConfig: function() {
+    var oldPref = Components.classes["@mozilla.org/preferences-service;1"]
+      .getService(Components.interfaces.nsIPrefService)
+      .getBranch("grabit.");
+    var newPref = Components.classes["@mozilla.org/preferences-service;1"]
+      .getService(Components.interfaces.nsIPrefService)
+      .getBranch("extensions.grabit.");
+    var newDef = Components.classes["@mozilla.org/preferences-service;1"]
+      .getService(Components.interfaces.nsIPrefService)
+      .getDefaultBranch("extensions.grabit.");
+    var a = oldPref.getChildList("");
+    for (var i = 0, len = a.length; i !== len; ++i) {
+      if (!oldPref.prefHasUserValue(a[i]))
+        continue;
+      if (newPref.prefHasUserValue(a[i]))
+        continue;
+      var tOld = oldPref.getPrefType(a[i]);
+      switch (tOld)
+      {
+        case 0x20:
+          var sDef = newDef.getCharPref(a[i], "");
+          var sOld = oldPref.getCharPref(a[i], sDef);
+          newPref.setCharPref(a[i], sOld);
+          break;
+        case 0x40:
+          var iDef = newDef.getIntPref(a[i], 0);
+          var iOld = oldPref.getIntPref(a[i], iDef);
+          newPref.setIntPref(a[i], iOld);
+          break;
+        case 0x80:
+          var bDef = newDef.getBoolPref(a[i], false);
+          var bOld = oldPref.getBoolPref(a[i], bDef);
+          newPref.setBoolPref(a[i], bOld);
+          break;
+      }
+    }
+    oldPref.deleteBranch("");
+  }
+,
   get _mediaIDs() {
     var widgetId = "grabit-media-status";
     var addonBar = document.getElementById("addon-bar");

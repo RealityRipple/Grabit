@@ -579,7 +579,7 @@ GrabitDM.prototype = {
       }
     }
     const isMulti = opType != fg.OP_ONE;
-    const multiDirPref = "grabit.multiDir";
+    const multiDirPref = "extensions.grabit.multiDir";
     var downloadDirPref =
                     (isMulti && findDownloadDir(multiDirPref)) ||
                     findDownloadDir("browser.download.dir") ||

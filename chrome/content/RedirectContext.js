@@ -35,7 +35,7 @@ var RedirectContext = function(links, opType, dm, onfinish) {
 };
 
 RedirectContext.prototype = {
-  prefs: CC["@mozilla.org/preferences-service;1"].getService(CI.nsIPrefService).getBranch("grabit.redir."),
+  prefs: CC["@mozilla.org/preferences-service;1"].getService(CI.nsIPrefService).getBranch("extensions.grabit.redir."),
   
   print: Components.utils && Components.utils.reportError || dump,
   log: function(msg) {

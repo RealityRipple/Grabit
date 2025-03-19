@@ -583,7 +583,7 @@ var Youtube = {
       if ( ! value.length) { return null; }
       var pref = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefService)
-        .getBranch("grabit." + branch);
+        .getBranch("extensions.grabit." + branch);
       var a = pref.getChildList("");
       for (var i = 0, len = a.length; i !== len; ++i) {
         var c = a[i];
@@ -617,7 +617,7 @@ var Youtube = {
     try {
       var pref = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefService)
-        .getBranch("grabit." + branch);
+        .getBranch("extensions.grabit." + branch);
 
       if (remap_hint) {
         var name_branch_name = remap_hint.replace(/\./g, "_");
@@ -787,7 +787,7 @@ var Youtube = {
     try {
       var pref = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefService)
-        .getBranch("grabit." + branch);
+        .getBranch("extensions.grabit." + branch);
       pref.addObserver("", new ItagMapObserver(pref, map), false);
       var a = pref.getChildList("");
       for (var i = 0, len = a.length; i !== len; ++i) {
@@ -816,7 +816,7 @@ var Youtube = {
     try {
       var pref = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefService)
-        .getBranch("grabit." + branch);
+        .getBranch("extensions.grabit." + branch);
       pref.addObserver("", new SortOrderObserver(pref, list), false);
 
       var a = this.parsePrefStringList(fg.getPref(branch, ""));
@@ -909,7 +909,7 @@ void function(){
   try {
     var pref = Components.classes["@mozilla.org/preferences-service;1"]
       .getService(Components.interfaces.nsIPrefService)
-      .getBranch("grabit.media.YouTube.");
+      .getBranch("extensions.grabit.media.YouTube.");
     pref.deleteBranch("itag_map.quality.");
     pref.deleteBranch("itag_remap.quality.");
     pref.deleteBranch("quality_sort_order");
